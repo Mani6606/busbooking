@@ -64,7 +64,7 @@ export default function Homepage() {
               <div>
                 <h2>Seats</h2>
                 <ul>
-                  {bus.Seats.map((seat) => (
+                  {bus.seats.map((seat) => (
                     <li key={seat.id}>{seat.number}</li>
                   ))}
                 </ul>
