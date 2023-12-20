@@ -1,119 +1,215 @@
-import React, { useState } from "react";
-import classes from "./seatselect.module.css";
+import { useState, useEffect } from "react";
 
-const SeatSelection = () => {
-  const totalRows = 10;
-  const seatsPerRow = 3;
-  let seatno = 0;
-  const sleeperSeatsCount = 5;
-  const seaterSeatsCount = 20;
-
-  const [seatData, setSeatData] = useState(() => {
-    // Initialize sleeper seat data
-    const sleeperSeats = Array.from(
-      { length: sleeperSeatsCount },
-      (_, index) => ({
-        seatNo: index + 1,
-        price: 50, // Adjust the price as needed
-        booked: false,
-      })
-    );
-
-    // Initialize seater seat data
-    const seaterSeats = Array.from(
-      { length: seaterSeatsCount },
-      (_, index) => ({
-        seatNo: index + 1 + sleeperSeatsCount,
-        price: 30, // Adjust the price as needed
-        booked: false,
-      })
-    );
-
-    return [...sleeperSeats, ...seaterSeats];
-  });
-
-  console.log(seatData);
-
+import classes from "./testing.module.css";
+import SeatIcon from "./svg";
+import SSeatIcon from "./seatsvg";
+import { FaChair } from "react-icons/fa";
+export default function SeatSelection({ props }) {
+  // ----------code to add the selected seats to an array to send server side----------------------------
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const handleSeatClick = (seatNo) => {
+    const clickedSeat = props.seats.find((seat) => seat.seatNo === seatNo);
 
-  const handleSeatClick = (row, seat) => {
-    const seatIndex = `${row}-${seat}`;
-    // console.log(selectedSeats)
-    if (selectedSeats.includes(seatIndex)) {
-      // If seat is already selected, remove it from the list
-      setSelectedSeats(selectedSeats.filter((s) => s !== seatIndex));
-    } else {
-      // If seat is not selected, add it to the list
-      setSelectedSeats([...selectedSeats, seatIndex]);
+    if (clickedSeat && !clickedSeat.booked) {
+      setSelectedSeats((prevSelectedSeats) => {
+        const isSeatSelected = prevSelectedSeats.includes(seatNo);
+        return isSeatSelected
+          ? prevSelectedSeats.filter((selectedSeat) => selectedSeat !== seatNo)
+          : [...prevSelectedSeats, seatNo];
+      });
     }
-    console.log(selectedSeats);
   };
+  //  ===============================SEAT LAYOUT START==============================================================================================
+  const renderSeats = () => {
+    // =========================================1==================================================================================================
+    const firstFiveSeats = props.seats.slice(0, 5).map((seat) => (
+      <div
+        key={seat.seatNo}
+        className={`
+        ${classes.firstSeat}
+        ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
+        ${seat.booked ? classes.booked : ""}
+       `}
+        onClick={() => handleSeatClick(seat.seatNo)}
+      >
+        <div className={classes.seatImageContainer}>
+          <SeatIcon
+            selected={selectedSeats.includes(seat.seatNo)}
+            booked={seat.booked}
+          />
+          <span className={classes.seatNumber}>{seat.seatNo}</span>
+        </div>
 
+        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
+      </div>
+    ));
+    // =====================================2==================================================================================================
+    const remainingSeats1 = props.seats.slice(5, 15).map((seat) => (
+      <div
+        key={seat.seatNo}
+        className={`
+          ${classes.seat} 
+          ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
+          ${seat.booked ? classes.booked : ""}
+        `}
+        onClick={() => handleSeatClick(seat.seatNo)}
+      >
+        <div className={classes.seatImageContainerseat}>
+          <SSeatIcon
+            selected={selectedSeats.includes(seat.seatNo)}
+            booked={seat.booked}
+          />
+          <span className={classes.seatNumberseat}>{seat.seatNo}</span>
+        </div>
+      </div>
+    ));
+    // ===================================================3======================================================================================
+    const remainingSeats2 = props.seats.slice(15, 25).map((seat) => (
+      <div
+        key={seat.seatNo}
+        className={`
+          ${classes.seat} 
+          ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
+          ${seat.booked ? classes.booked : ""}
+        `}
+        onClick={() => handleSeatClick(seat.seatNo)}
+      >
+        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
+        <div className={classes.seatImageContainerseat}>
+          <SSeatIcon
+            selected={selectedSeats.includes(seat.seatNo)}
+            booked={seat.booked}
+          />
+          <span className={classes.seatNumberseat}>{seat.seatNo}</span>
+        </div>
+      </div>
+    ));
+    // ===================================================4==================================================================================
+    const upper1 = props.seats.slice(25, 30).map((seat) => (
+      <div
+        key={seat.seatNo}
+        className={`
+        ${classes.firstSeatub1}
+        ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
+        ${seat.booked ? classes.booked : ""}
+          
+        `}
+        onClick={() => handleSeatClick(seat.seatNo)}
+      >
+        <div className={classes.seatImageContainer}>
+          <SeatIcon
+            selected={selectedSeats.includes(seat.seatNo)}
+            booked={seat.booked}
+          />
+          <span className={classes.seatNumber}>{seat.seatNo}</span>
+        </div>
+        {/* <Image src='/seat.png' height={20} width={20} alt={`Seat ${seat.seatNo}`} /> */}
+        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
+      </div>
+    ));
+    // ===================================================5==================================================================================
+    const upper2 = props.seats.slice(30, 35).map((seat) => (
+      <div
+        key={seat.seatNo}
+        className={`
+        ${classes.firstSeatub}
+        ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
+        ${seat.booked ? classes.booked : ""}
+          
+        `}
+        onClick={() => handleSeatClick(seat.seatNo)}
+      >
+        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
+        <div className={classes.seatImageContainer}>
+          <SeatIcon
+            selected={selectedSeats.includes(seat.seatNo)}
+            booked={seat.booked}
+          />
+          <span className={classes.seatNumber}>{seat.seatNo}</span>
+        </div>
+      </div>
+    ));
+    // ====================================6=======================================================================================================
+    const upper3 = props.seats.slice(35, 40).map((seat) => (
+      <div
+        key={seat.seatNo}
+        className={`
+        ${classes.firstSeatub}
+        ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
+        ${seat.booked ? classes.booked : ""}
+          
+        `}
+        onClick={() => handleSeatClick(seat.seatNo)}
+      >
+        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
+        <div className={classes.seatImageContainer}>
+          <SeatIcon
+            selected={selectedSeats.includes(seat.seatNo)}
+            booked={seat.booked}
+          />
+          <span className={classes.seatNumber}>{seat.seatNo}</span>
+        </div>
+      </div>
+    ));
+    //  ==========================================================================================================================================
+    return (
+      <div className={classes.head}>
+        <div className={classes.head1}>
+          <h2>LOWER DECK</h2>
+          <h2>UPPER DECK</h2>
+        </div>
+        <div className={classes.seatgrid}>
+          <div className={classes.layoutlb}>
+            <div>{firstFiveSeats}</div>
+            <div>{remainingSeats1}</div>
+            <div>{remainingSeats2}</div>
+          </div>
+          <div className={classes.layoutub}>
+            <div>{upper1}</div>
+            <div>{upper2}</div>
+            <div>{upper3}</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  // ================================SEAT LAYOUT END ==========================================================================================
+
+  // ==================================== POST REQUEST TO API=================================================================================
   async function book() {
-    const responce = await fetch("/api/seatsbooking", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ selectedSeats }),
-    });
-    const jsonData = await responce.json();
-    if (responce.ok) {
-      console.log(jsonData.msg);
-    } else {
-      console.log(jsonData.msg);
+    // Your booking logic here using selectedSeats array
+    console.log("Selected Seats:", selectedSeats);
+
+    try {
+      // Send a POST request to your server to update the database
+      const response = await fetch("/api/seatsbooking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ selectedSeats }),
+      });
+
+      if (response.ok) {
+        console.log("Booking successful");
+
+        // Clear selected seats after booking
+        setSelectedSeats([]);
+      } else {
+        console.log("Booking failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   }
+  // =========================================================================================================================================
   return (
     <div className={classes.busout}>
       <div className={classes.seatselectioncontainer}>
-        <h2>Bus Seat Selection</h2>
-        {/* ------------------------------------------------------------------- */}
-        <div className={classes.wholebus}>
-          <div className={classes.seatgrid}>
-            {[...Array(5)].map((_, row) => (
-              <div key={row} className={classes.seatrow}>
-                {[...Array(1)].map((_, seat) => (
-                  <div
-                    key={seat}
-                    className={`
-                ${classes.seat} 
-                ${
-                  selectedSeats.includes(`${row}-${seat}`)
-                    ? classes.selected
-                    : ""
-                } 
-                ${seat === 0 ? classes.firstSeat : ""}`} // Apply the 'firstSeat' class to the first seat in each row
-                    onClick={() => handleSeatClick(row, seat)}
-                  >
-                    <p>|_ {(seatno = seatno + 1)}_|</p>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          {/* -------------------------------------------------------------------------------------- */}
-          <div className={classes.seatgrid}>
-            {[...Array(totalRows)].map((_, row) => (
-              <div key={row} className={classes.seatrow}>
-                {[...Array(seatsPerRow - 1)].map((_, seat) => (
-                  <div
-                    key={seat}
-                    className={`
-                ${classes.seat} 
-                ${
-                  selectedSeats.includes(`${row}-${seat}`)
-                    ? classes.selected
-                    : ""
-                } 
-                ${seat === 0 ? classes.firstSeatone : ""}`}
-                    onClick={() => handleSeatClick(row, seat)}
-                  >
-                    <p>|_ {(seatno = seatno + 1)}_|</p>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          {/* ---------------------------------------------------------------------------------------- */}
+        <h2>Bus-{props.busNo}</h2>
+        <div className={classes.split}>
+          <div className={classes.seatselect}>{renderSeats()}</div>
+          <div className={classes.ticketdetails}>ticketdetails</div>
         </div>
       </div>
 
@@ -123,6 +219,4 @@ const SeatSelection = () => {
       </div>
     </div>
   );
-};
-
-export default SeatSelection;
+}

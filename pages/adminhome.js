@@ -1,4 +1,4 @@
-export default function Home(){
-    return(<h1>Admin Home page</h1>);
-
+import AdminHome from "../components/admin/adminhome";
+export default function Ts() {
+  return <AdminHome />;
 }

@@ -133,61 +133,58 @@ const BusList = ({ onBackButtonClick }) => {
               fullWidth
               key={bus._id}
               sx={{
-                border: "2px solid #000000",
+                border: "1px solid #000000",
                 borderRadius: "8px",
-                marginRight: "10px", // Add margin between items
-                marginBottom: "10px",
-                padding: "10px",
-                width: "120%", // Set width to 100%
-                height: "15%", // Set height to 15%
-                display: "flex",
-                flexDirection: "row",
+                marginBottom: "20px",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
               }}
             >
               <ListItemText
-                fullWidth
-                maxWidth="lg"
-                sx={{
-                  display: "flex",
-                  flexDirection: "row", // Keep it as "row"
-                  justifyContent: "space-between", // Optional: Adjust the spacing between elements
-                  alignItems: "center",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                  width: "100%",
-                  height: "100%", // Set height to 100%
-                  // backgroundColor: "#4caf50",
-                }}
+              // fullWidth
+              // maxWidth="lg"
+              // sx={{
+              //   display: "flex",
+              //   flexDirection: "row", // Keep it as "row"
+              //   justifyContent: "space-between", // Optional: Adjust the spacing between elements
+              //   alignItems: "center",
+              //   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              //   width: "100%",
+              //   height: "100%", // Set height to 100%
+              //   // backgroundColor: "#4caf50",
+              // }}
               >
-                <Typography
-                  fullWidth
-                  variant="h6"
-                  sx={{
-                    fontWeight: "bold",
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  Bus No: {bus.formData.busNo}
-                  <Typography
-                    sx={{ color: "black", fontWeight: "bold", padding: "10px" }}
-                  >
-                    FROM:
+                <div className={classes.list}>
+                  <div className={classes.heading}>Bus No: </div>
+                  <div className={classes.value}>{bus.formData.busNo}</div>
+                  <div className={classes.heading}> From: </div>
+                  <div className={classes.value}>{bus.formData.from}</div>
+                  <div className={classes.heading}> To: </div>
+                  <div className={classes.value}> {bus.formData.to}</div>
+                  <div className={classes.heading}>Departure Time: </div>
+                  <div className={classes.value}>
+                    {bus.formData.departureTime}
+                  </div>
+                  <div className={classes.heading}> Arrival Time: </div>
+                  <div className={classes.value}>
+                    {bus.formData.arrivalTime}
+                  </div>
+
+                  {/* <Typography sx={{ color: "black", fontWeight: "bold" }}>
+                    From: {bus.formData.from}
                   </Typography>
-                  <Typography>{bus.formData.from}</Typography>
-                  <Typography
-                    sx={{ color: "black", fontWeight: "bold", padding: "10px" }}
-                  >
-                    TO:
-                  </Typography>
-                  <Typography> {bus.formData.to} </Typography>
+
                   <Typography sx={{ color: "black", fontWeight: "bold" }}>
-                    DEPARTURE: {bus.formData.departureTime}
+                    To: {bus.formData.to}
                   </Typography>
+
                   <Typography sx={{ color: "black", fontWeight: "bold" }}>
-                    ARRIVAL: {bus.formData.arrivalTime}
+                    Departure Time: {bus.formData.departureTime}
                   </Typography>
-                </Typography>
+
+                  <Typography sx={{ color: "black", fontWeight: "bold" }}>
+                    Arrival Time: {bus.formData.arrivalTime}
+                  </Typography> */}
+                </div>
               </ListItemText>
 
               <Button

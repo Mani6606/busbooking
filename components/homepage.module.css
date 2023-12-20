@@ -1,33 +1,21 @@
-.buses {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  border: 2px solid black;
-  height: 0%;
-  background-color: antiquewhite;
-  border-radius: 10px;
+.box {
+  width: 100%;
 }
-.buses button {
-  padding: 8px;
-  border-radius: 10px;
-  width: 150px;
-}
-.smallone {
+.list {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  height: 20px;
   align-items: center;
-  margin: 0px;
-  padding: 4px;
+  justify-content: center;
 }
-.smalldiv {
-  /* background-color: rgb(238, 143, 20); */
-  /* background-color: aqua; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 0px;
+
+.heading {
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+.value {
+  font-weight: medium;
+  font-size: 14px;
+  margin-right: 20px;
 }
