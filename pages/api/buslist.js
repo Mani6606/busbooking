@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const { formData } = req.body;
-      console.log("formdata", formData);
+      // console.log("formdata", formData);
       const timestamp = new Date();
       const client = await ConnectToDatabase();
       const db = client.db("my-site");
@@ -42,7 +42,7 @@ export default async function handler(req, res) {
   else if (req.method === "DELETE") {
     try {
       const { _id } = req.body;
-      console.log("Received DELETE request with _id:", _id);
+      // console.log("Received DELETE request with _id:", _id);
 
       const client = await ConnectToDatabase();
       const db = client.db("my-site");
@@ -78,27 +78,70 @@ export default async function handler(req, res) {
 
       // Fetch the current seats array from the bus document
       const existingBus = await collection.findOne({ "formData.busNo": busNo });
-      console.log("existingBus", existingBus);
+
       const existingSeats = existingBus ? existingBus.formData.seats : [];
-      console.log("existingSeats", existingSeats);
 
       // Update details for each selected seat
+
       selectedSeats.forEach((selectedSeat) => {
+        let reserv = 0;
         const seatIndex = existingSeats.findIndex(
           (seat) => seat.seatNo === selectedSeat
         );
+        const seatIndexx = seatDetails.findIndex(
+          (seat) => seat.seatNo === selectedSeat
+        );
+        if (selectedSeat >= 6 && selectedSeat <= 15) {
+          console.log("selected seats is between 5 and 15");
+          reserv += 10;
+        }
+        if (selectedSeat >= 16 && selectedSeat <= 25) {
+          console.log("selected seats is between 5 and 15");
+          reserv -= 10;
+        }
+        if (selectedSeat >= 31 && selectedSeat <= 35) {
+          console.log("selected seats is between 5 and 15");
+          reserv += 5;
+        }
+        if (selectedSeat >= 36 && selectedSeat <= 40) {
+          console.log("selected seats is between 5 and 15");
+          reserv -= 5;
+        }
+        if (
+          !existingBus.formData.seats[seatIndex + reserv].booked &&
+          seatDetails[seatIndexx].gender === "female"
+        ) {
+          console.log("plus 10seats is not booked and the gender is female");
+          existingBus.formData.seats[seatIndex + reserv] = {
+            seatNo: existingBus.formData.seats[seatIndex + reserv].seatNo,
+            price: existingBus.formData.seats[seatIndex + reserv].price,
+            booked: false,
+            name: existingBus.formData.seats[seatIndex + reserv].name,
+            gender: existingBus.formData.seats[seatIndex + reserv].gender,
+            age: existingBus.formData.seats[seatIndex + reserv].age,
+            berth: existingBus.formData.seats[seatIndex + reserv].berth,
+            seat_type: existingBus.formData.seats[seatIndex + reserv].seat_type,
+            reserved: true,
+          };
+          console.log(
+            "reserved bus details",
+            existingBus.formData.seats[seatIndex + reserv]
+          );
+        }
+
         console.log("seatIndex", seatIndex);
+        console.log("name", seatDetails[seatIndexx]?.name);
         // ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
         existingBus.formData.seats[seatIndex] = {
           seatNo: existingBus.formData.seats[seatIndex].seatNo,
           price: existingBus.formData.seats[seatIndex].price,
           booked: true,
-          name: seatDetails[selectedSeat]?.name || "",
-          gender: seatDetails[selectedSeat]?.gender || "",
-          age: seatDetails[selectedSeat]?.age || "",
+          name: seatDetails[seatIndexx]?.name || "",
+          gender: seatDetails[seatIndexx]?.gender || "",
+          age: seatDetails[seatIndexx]?.age || "",
           berth: existingBus.formData.seats[seatIndex].berth,
           seat_type: existingBus.formData.seats[seatIndex].seat_type,
-          reserved: "",
+          reserved: false,
         };
 
         // ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????

@@ -19,3 +19,37 @@
   font-size: 14px;
   margin-right: 20px;
 }
+
+
+
+.legend {
+  border: 2px solid black;
+}
+.notbooked {
+  height: 20px;
+  width: 20px;
+  background-color: #ffffff;
+  margin: 10px;
+  border: 1px solid black;
+}
+.booked {
+  height: 20px;
+  width: 20px;
+  background-color: #1816167c;
+  margin: 10px;
+  border: 1px solid black;
+}
+.bookedfemale {
+  height: 20px;
+  width: 20px;
+  background-color: #ec79d5;
+  margin: 10px;
+  border: 1px solid black;
+}
+.reserved {
+  height: 17px;
+  width: 17px;
+  background-color: #ffffff;
+  margin: 10px;
+  border: 3px solid rgb(241, 12, 207);
+}

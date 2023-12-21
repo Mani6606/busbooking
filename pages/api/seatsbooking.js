@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 const uri =
   "mongodb+srv://user1:user123@cluster0.6gjnvof.mongodb.net/?retryWrites=true&w=majority";
@@ -14,10 +14,10 @@ export async function connectToDB() {
 
 export default async function handler(req, res) {
   const dbName = "my-site";
-  if (req.method === "GET") {
+  if (req.method === "POST") {
     console.log("Entering into the GET request block");
     try {
-      const { _id } = req.query;
+      const { _id } = req.body;
       console.log(_id);
 
       if (!_id) {
@@ -28,9 +28,10 @@ export default async function handler(req, res) {
       const client = await connectToDB();
       const db = client.db("my-site");
       const collection = db.collection("buslist");
-      const busDetails = await collection.findOne({ _id });
+      const objectId = new ObjectId(_id);
+      const busDetails = await collection.findOne({ _id: objectId });
 
-      console.log(busDetails);
+      console.log("busDetails", busDetails);
 
       if (!busDetails) {
         res.status(404).json({ error: "Bus not found" });

@@ -1,184 +1,56 @@
-.layoutlb {
-  /* background-color: #45a049; */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid black;
-  width: 150px;
-}
-.layoutub {
-  /* background-color: #45a049; */
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  border: 2px solid black;
-}
-
-.seatselectioncontainer {
-  margin: 0;
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  /* background-color: rgb(58, 119, 173); */
-
-  .seatcolumn {
-    background-color: aqua;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-}
-.seatselectioncontainer h2 {
-  background-color: #45a049;
-  border: 2px solid black;
-}
-
-.seatgrid {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.seatrow {
-  display: flex;
-  margin-bottom: 10px;
-  /* margin-left:20px; */
-}
-
-.seat {
-  width: 18.5px;
-  height: 21px;
-  /* border: 1px solid #ed0e0e; */
-  border-radius: 2px;
-  margin-right: 20px;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  /* background-color: rgb(160, 69, 69) ; */
-}
-
-.seat.selected {
-  background-color: #4caf50;
-  color: white;
-  border: 1px solid #45a049;
-}
-.seat.booked {
-  background-color: rebeccapurple;
-}
-.selectedseats {
+.legend {
+  border: 1px solid black;
+  width: 10%;
   margin-top: 20px;
   display: flex;
-  flex-direction: row;
-}
-.busout {
-  border: 2px solid black;
-  width: 100%;
-  height: 70%;
-  display: flex;
   flex-direction: column;
-  /* background-color: #ffcccb; */
+  /* align-items: center; */
+  /* justify-content: center; */
 }
-.firstSeat {
-  /* Your styles for the first seat go here */
-  background-color: #ffcccb;
-  color: black; /* Example text color */
-  margin-right: 30px;
-  margin-left: 20px;
-  margin-bottom: 5px;
-  text-align: center;
+.legendd {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center;
+  align-items: center; */
+  margin: 0px;
   align-items: center;
-  height: 70px;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* background-color: #72fe70; */
+}
+.legend h3 {
+  margin-top: 4px;
+}
+.notbooked {
+  height: 20px;
+  width: 20px;
+  background-color: #ffffff;
+
+  border: 1px solid black;
+}
+.boooked {
+  height: 20px;
+  width: 20px;
+  background-color: #1816167c;
+  margin-left: 0px;
+  border: 1px solid black;
+}
+.bookedfemale {
+  height: 20px;
+  width: 40px;
+  background-color: #ec79d5;
+  margin-left: 0px;
+  border: 1px solid black;
+}
+.reserved {
+  height: 17px;
   width: 34px;
-  border-radius: 6px;
-  /* border:2px solid black; */
-  /* background-color: #ffcccb; */
-}
-.firstSeat.selected {
-  background-color: #45a049;
-}
-.firstSeat.booked {
-  background-color: rebeccapurple;
-}
-.seatImageContainer {
-  position: relative;
-  width: 20px; /* Adjust the width as needed */
-  height: 20px; /* Adjust the height as needed */
+  background-color: #ffffff;
+
+  border: 3px solid rgb(241, 12, 207);
 }
 
-.seatNumber {
-  position: absolute;
-  top: 150%;
-  left: 100%;
-  transform: translate(-50%, -50%);
-  color: rgb(0, 0, 0); /* Adjust the color as needed */
-  font-size: 16px; /* Adjust the font size as needed */
-}
-.seatImageContainerseat {
-  position: relative;
-  width: 20px; /* Adjust the width as needed */
-  height: 20px; /* Adjust the height as needed */
-}
-
-.seatNumberseat {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: rgb(0, 0, 0); /* Adjust the color as needed */
-  font-size: 13px; /* Adjust the font size as needed */
-}
-
-/* -------------------------------------- */
-.firstSeatub {
-  /* Your styles for the first seat go here */
-  background-color: #ffcccb; /* Example background color */
-  color: black; /* Example text color */
-  margin-right: 5px;
-  margin-left: 1px;
-  margin-bottom: 5px;
-  text-align: center;
-  align-items: center;
-  height: 70px;
-  width: 34px;
-  border-radius: 6px;
-  /* background-color: #ffcccb; */
-}
-.firstSeatub.selected {
-  background-color: #45a049;
-}
-.firstSeatub.booked {
-  background-color: rebeccapurple;
-}
-/* ------------------------------------------------------------- */
-.firstSeatub1 {
-  /* Your styles for the first seat go here */
-  background-color: #ffcccb; /* Example background color */
-  color: black; /* Example text color */
-  margin-right: 25px;
-  margin-left: 15px;
-  margin-bottom: 5px;
-  text-align: center;
-  align-items: center;
-  height: 70px;
-  width: 34px;
-  border-radius: 6px;
-  /* background-color: #ffcccb; */
-}
-.firstSeatub1.selected {
-  background-color: #45a049;
-}
-.firstSeatub1.booked {
-  background-color: rebeccapurple;
-}
 .head {
   display: flex;
   flex-direction: column;
@@ -195,9 +67,10 @@
 .split {
   display: flex;
   flex-direction: row;
+  /* border: 2px solid black; */
 }
 .ticketdetails {
-  background-color: #45a049;
+  /* background-color: #45a049; */
   padding-right: 10px;
   margin-left: 20px;
 }
@@ -256,17 +129,22 @@
 }
 
 .seat.selected {
-  background-color: #4caf50;
+  background-color: #72fe70;
   color: white;
   border: 1px solid #45a049;
 }
 .seat.booked {
-  background-color: rebeccapurple;
+  background-color: #1816167c;
 }
 .selectedseats {
-  margin-top: 20px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+.selectedseats button {
+  margin-right: 20px;
+  margin-bottom: 5px;
+  padding: 3px 20px 3px 20px;
 }
 /* .busout {
   border: 2px solid black;
@@ -278,7 +156,7 @@
 } */
 .firstSeat {
   /* Your styles for the first seat go here */
-  background-color: #ffcccb;
+  background-color: #ffffff;
   color: black; /* Example text color */
   margin-right: 30px;
   margin-left: 20px;
@@ -292,10 +170,10 @@
   /* background-color: #ffcccb; */
 }
 .firstSeat.selected {
-  background-color: #45a049;
+  background-color: #72fe70;
 }
 .firstSeat.booked {
-  background-color: rebeccapurple;
+  background-color: #1816167c;
 }
 .seatImageContainer {
   position: relative;
@@ -329,7 +207,7 @@
 /* -------------------------------------- */
 .firstSeatub {
   /* Your styles for the first seat go here */
-  background-color: #ffcccb; /* Example background color */
+  background-color: rgb(255, 255, 255); /* Example background color */
   color: black; /* Example text color */
   margin-right: 5px;
   margin-left: 1px;
@@ -342,15 +220,15 @@
   /* background-color: #ffcccb; */
 }
 .firstSeatub.selected {
-  background-color: #45a049;
+  background-color: #72fe70;
 }
 .firstSeatub.booked {
-  background-color: rebeccapurple;
+  background-color: #1816167c;
 }
 /* ------------------------------------------------------------- */
 .firstSeatub1 {
   /* Your styles for the first seat go here */
-  background-color: #ffcccb; /* Example background color */
+  background-color: #ffffff; /* Example background color */
   color: black; /* Example text color */
   margin-right: 25px;
   margin-left: 15px;
@@ -363,8 +241,8 @@
   /* background-color: #ffcccb; */
 }
 .firstSeatub1.selected {
-  background-color: #45a049;
+  background-color: #72fe70;
 }
 .firstSeatub1.booked {
-  background-color: rebeccapurple;
+  background-color: #1816167c;
 }

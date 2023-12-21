@@ -42,6 +42,7 @@ const BusList = ({ onBackButtonClick }) => {
     // Find the selected bus by _id
     const selected = busList.find((bus) => bus._id === _id);
     setSelectedBus(selected);
+    console.log(selected);
   };
 
   const handleDeleteBus = (_id) => {
