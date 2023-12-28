@@ -20,8 +20,26 @@ async function ConnectToDatabase() {
 export default async function handler(req, res) {
   if (req.method === "DELETE") {
     try {
+      let reserv = 0;
+
       const { busNo, seatNo } = req.body;
       console.log("bbb", busNo, seatNo);
+      if (seatNo >= 6 && seatNo <= 15) {
+        console.log("selected seats is between 5 and 15");
+        reserv += 10;
+      }
+      if (seatNo >= 16 && seatNo <= 25) {
+        console.log("selected seats is between 5 and 15");
+        reserv -= 10;
+      }
+      if (seatNo >= 31 && seatNo <= 35) {
+        console.log("selected seats is between 5 and 15");
+        reserv += 5;
+      }
+      if (seatNo >= 36 && seatNo <= 40) {
+        console.log("selected seats is between 5 and 15");
+        reserv -= 5;
+      }
       // Connect to the database
       const client = await ConnectToDatabase();
       const db = client.db("my-site");
@@ -59,7 +77,19 @@ export default async function handler(req, res) {
         seat_type: bus.formData.seats[seatIndex].seat_type,
         reserved: "",
       };
-
+      console.log("reserv number", reserv);
+      bus.formData.seats[seatIndex + reserv] = {
+        seatNo: bus.formData.seats[seatIndex + reserv].seatNo,
+        price: bus.formData.seats[seatIndex + reserv].price,
+        booked: bus.formData.seats[seatIndex + reserv].booked,
+        name: bus.formData.seats[seatIndex + reserv].name,
+        gender: bus.formData.seats[seatIndex + reserv].gender,
+        age: bus.formData.seats[seatIndex + reserv].age,
+        berth: bus.formData.seats[seatIndex + reserv].berth,
+        seat_type: bus.formData.seats[seatIndex + reserv].seat_type,
+        reserved: false,
+      };
+      console.log(bus.formData.seats[seatIndex + reserv]);
       // Update the bus in the database
       await collection.updateOne({ _id: new ObjectId(bus._id) }, { $set: bus });
 

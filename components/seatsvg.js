@@ -2,7 +2,7 @@ import React from "react";
 
 const SSeatIcon = () => {
   return (
-    <svg width="25" height="25">
+    <svg width="25" height="25  ">
       <rect
         x="0"
         y="20"

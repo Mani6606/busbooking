@@ -1,21 +1,24 @@
 import { useState, useEffect } from "react";
-
+import { Dialog } from "@mui/material";
 import classes from "./testing.module.css";
 import SeatIcon from "./svg";
 import SSeatIcon from "./seatsvg";
-
-// =========================================PASSENGER COMPONENT============================================================================
-
-// ============================================================================================================================================
-
-export default function SeatSelection({ bus }) {
-  // ----------code to add the selected seats to an array to send server side----------------------------
+import Confirm from "./confrimbooking";
+import { useRouter } from "next/router";
+export default function SeatSelection({ bus, callback }) {
+  const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seatDetails, setSeatDetails] = useState([]);
+  // const [nameerror, setNameerror] = useState(false);
+  // const [ageerror, setAgeerror] = useState(false);
+  // const [gendererror, setGendererror] = useState(false);
+  const [nameErrors, setNameErrors] = useState({});
+  const [ageErrors, setAgeErrors] = useState({});
+
+  const [genderErrors, setGenderErrors] = useState({});
   // ==========================================INTIAL FETCHING THE SEATS=======================================================================
   const [props, setProps] = useState({});
-  const [busdetails, setBusdetails] = useState([]);
-
+  const router = useRouter;
   const fetchSeatList = async () => {
     try {
       const response = await fetch("/api/seatsbooking", {
@@ -46,13 +49,23 @@ export default function SeatSelection({ bus }) {
 
   // =========================================================================================================================================
   const handleSeatClick = (seatNo) => {
+    console.log("props", props);
     const clickedSeat = props.seats.find((seat) => seat.seatNo === seatNo);
+    console.log(clickedSeat);
     const selectedSeatsLength =
       Object.values(selectedSeats).filter(Boolean).length;
+    const isSeatSelected = selectedSeats.includes(seatNo);
 
-    if (clickedSeat && !clickedSeat.booked && selectedSeatsLength < 5) {
-      // Check if the seat number is in the specified ranges
+    if (clickedSeat.booked) {
+      alert("Seat Already Booked");
+      return;
+    }
 
+    if (
+      clickedSeat &&
+      !clickedSeat.booked &&
+      (selectedSeatsLength < 5 || isSeatSelected)
+    ) {
       setSelectedSeats((prevSelectedSeats) => {
         const isSeatSelected = prevSelectedSeats.includes(seatNo);
         return isSeatSelected
@@ -61,22 +74,32 @@ export default function SeatSelection({ bus }) {
       });
 
       setSeatDetails((prevSeatDetails) => {
-        const existingDetail = prevSeatDetails.find(
+        const existingDetailIndex = prevSeatDetails.findIndex(
           (detail) => detail.seatNo === seatNo
         );
 
-        if (existingDetail) {
-          // If details exist, don't add new empty object
-          return prevSeatDetails;
+        if (existingDetailIndex !== -1) {
+          // If details exist, remove the existing detail
+          const updatedSeatDetails = [...prevSeatDetails];
+          updatedSeatDetails.splice(existingDetailIndex, 1);
+          return updatedSeatDetails;
         }
 
         // Add a new empty object for the selected seat
         return [...prevSeatDetails, { seatNo, name: "", age: "", gender: "" }];
       });
 
-      // If the seat is in the reserved range, add it to reservedSeats
+      setNameErrors((prevNameErrors) => ({
+        ...prevNameErrors,
+        [seatNo]: false,
+      }));
+      setAgeErrors((prevAgeErrors) => ({ ...prevAgeErrors, [seatNo]: false }));
+      setGenderErrors((prevGenderErrors) => ({
+        ...prevGenderErrors,
+        [seatNo]: false,
+      }));
     } else {
-      alert("Maximum seats reached or seat is booked");
+      alert("Maximum seats reached");
     }
   };
 
@@ -254,11 +277,15 @@ export default function SeatSelection({ bus }) {
     // }, 2000);
   }, [props]);
   // ================================SEAT LAYOUT END ==========================================================================================
+  const openConfirmationDialog = () => {
+    setConfirmationDialogOpen(true);
+  };
 
+  const closeConfirmationDialog = () => {
+    setConfirmationDialogOpen(false);
+  };
   // ==================================== POST REQUEST TO API=================================================================================
-  async function book() {
-    // Your booking logic here using selectedSeats array
-
+  async function confrimbook() {
     try {
       // Send a POST request to your server to update the database
       const response = await fetch("/api/buslist", {
@@ -279,6 +306,8 @@ export default function SeatSelection({ bus }) {
         // Clear selected seats after booking
         setSelectedSeats([]);
         setSeatDetails([]);
+        callback();
+        // closeConfirmationDialog();
       } else {
         console.log("Booking failed");
       }
@@ -286,11 +315,59 @@ export default function SeatSelection({ bus }) {
       console.error("Error:", error);
     }
   }
+
+  async function book() {
+    console.log("selectedSeats and seatDEtails", selectedSeats, seatDetails);
+    const selectedSeatsLength =
+      Object.values(selectedSeats).filter(Boolean).length;
+    if (selectedSeatsLength === 0) {
+      alert("no seats selected");
+      return;
+    }
+    // Validate seat details
+    const isSeatDetailsValid = seatDetails.every((detail) => {
+      const isValidName =
+        detail.name &&
+        detail.name.length >= 3 &&
+        /^[a-zA-Z ]+$/.test(detail.name);
+      const isValidAge = detail.age && detail.age > 5;
+      const isValidGender =
+        detail.gender &&
+        (detail.gender === "male" || detail.gender === "female");
+
+      // Log specific errors for each seat
+      if (!isValidName) {
+        alert(`Invalid name for seat ${detail.seatNo}`);
+        return;
+      }
+      if (!isValidAge) {
+        alert(`Invalid age for seat ${detail.seatNo}`);
+        return;
+      }
+      if (!isValidGender) {
+        alert(`Invalid gender for seat ${detail.seatNo}`);
+        return;
+      }
+
+      return isValidName && isValidAge && isValidGender;
+    });
+
+    // if (!isSeatDetailsValid) {
+    //   alert("Please correct the errors in the seat details.");
+    //   return;
+    // }
+    if (isSeatDetailsValid) {
+      openConfirmationDialog();
+    } else {
+      alert("check the seat details");
+    }
+  }
   // =========================================================================================================================================
 
   // ====================================================TICKET DETAILS======================================================================
 
   const renderTicketDetails = () => {
+    console.log(selectedSeats);
     return selectedSeats.map((seatNo) => {
       const seatDetail = seatDetails.find((detail) => detail.seatNo === seatNo);
       const isSeatReservedForFemale = props.seats.find(
@@ -299,56 +376,142 @@ export default function SeatSelection({ bus }) {
 
       return (
         <div key={seatNo} className={classes.ticketDetail}>
-          <h3>{`Seat ${seatNo}`}</h3>
-          <label>Name:</label>
-          <input
-            type="text"
-            value={seatDetail?.name || ""}
-            onChange={(e) => handleInputChange(seatNo, "name", e.target.value)}
-          />
-          <label>Age:</label>
-          <input
-            type="text"
-            value={seatDetail?.age || ""}
-            onChange={(e) => handleInputChange(seatNo, "age", e.target.value)}
-          />
-          <label>Gender:</label>
-          {isSeatReservedForFemale ? (
-            <select
-              value={seatDetail?.gender || ""}
-              onChange={(e) =>
-                handleInputChange(seatNo, "gender", e.target.value)
-              }
-            >
-              <option value="">Select Gender</option>
-              <option value="female">Female</option>
-            </select>
-          ) : (
-            <select
-              value={seatDetail?.gender || ""}
-              onChange={(e) =>
-                handleInputChange(seatNo, "gender", e.target.value)
-              }
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          )}
+          <div>
+            <h3>{`Seat ${seatNo}`}</h3>
+          </div>
+          <div className={classes.smalldetail}>
+            <label>Name:</label>
+
+            <div className={classes.errordetails}>
+              <input
+                type="text"
+                value={seatDetail?.name || ""}
+                // seatDetail.name === "" ? "required" :
+                placeholder="Enter your name"
+                onChange={(e) =>
+                  handleInputChange(seatNo, "name", e.target.value)
+                }
+              />
+              <div className={classes.error}>
+                {seatDetail.name === "" ? (
+                  <p>*required</p>
+                ) : (
+                  nameErrors[seatNo] && (
+                    <p>
+                      minimum of 3 characters. Should not allow numbers or any
+                      special characters.
+                    </p>
+                  )
+                )}
+              </div>
+            </div>
+
+            <label>Age:</label>
+            <div className={classes.errordetails}>
+              <input
+                type="number"
+                placeholder="Enter your age"
+                value={seatDetail?.age || ""}
+                onChange={(e) =>
+                  handleInputChange(seatNo, "age", e.target.value)
+                }
+              />
+              <div className={classes.error}>
+                {seatDetail.age === "" ? (
+                  <p>*required</p>
+                ) : (
+                  ageErrors[seatNo] && <p>age should be above 5</p>
+                )}
+              </div>
+            </div>
+
+            <label>Gender:</label>
+            <div className={classes.errordetails}>
+              {isSeatReservedForFemale ? (
+                <select
+                  value={seatDetail?.gender || ""}
+                  onChange={(e) =>
+                    handleInputChange(seatNo, "gender", e.target.value)
+                  }
+                >
+                  <option value="">Select Gender</option>
+                  <option value="female">Female</option>
+                </select>
+              ) : (
+                <select
+                  value={seatDetail?.gender || ""}
+                  onChange={(e) =>
+                    handleInputChange(seatNo, "gender", e.target.value)
+                  }
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              )}
+              <div className={classes.error}>
+                {seatDetail.gender === "" ? (
+                  <p>*required</p>
+                ) : (
+                  genderErrors[seatNo] && <p>mandatory</p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       );
     });
   };
 
   const handleInputChange = (seatNo, field, value) => {
+    if (field === "name") {
+      if (value && value.length > 3 && !!/^[a-zA-Z ]+$/.test(value)) {
+        // console.log("name satisfying the above criteria");
+        setNameErrors((prevNameErrors) => ({
+          ...prevNameErrors,
+          [seatNo]: false,
+        }));
+      } else {
+        // console.error(
+        //   "Name is mandatory and should be at least 3 characters long."
+        // );
+        setNameErrors((prevNameErrors) => ({
+          ...prevNameErrors,
+          [seatNo]: true,
+        }));
+      }
+    } else if (field === "age") {
+      if (value && value > 5) {
+        // console.log("age satisfying the above criteria");
+        setAgeErrors((prevAgeErrors) => ({
+          ...prevAgeErrors,
+          [seatNo]: false,
+        }));
+      } else {
+        // console.error(
+        //   "age is mandatory and should be at greater than 5 characters long."
+        // );
+        setAgeErrors((prevAgeErrors) => ({ ...prevAgeErrors, [seatNo]: true }));
+      }
+    } else {
+      if (!value) {
+        // console.error("gender is mandatory");
+        setGenderErrors((prevGenderErrors) => ({
+          ...prevGenderErrors,
+          [seatNo]: true,
+        }));
+      } else {
+        setGenderErrors((prevGenderErrors) => ({
+          ...prevGenderErrors,
+          [seatNo]: false,
+        }));
+      }
+    }
     const updatedDetails = seatDetails.map((detail) =>
       detail.seatNo === seatNo ? { ...detail, [field]: value } : detail
     );
-
     setSeatDetails(updatedDetails);
   };
-
-  const handleSubmit = () => {};
 
   // ==========================================================================================================================================
   return (
@@ -392,6 +555,20 @@ export default function SeatSelection({ bus }) {
       <div className={classes.selectedseats}>
         <p>Selected Seats: {selectedSeats.join(", ")}</p>
         <button onClick={book}>Book</button>
+        <Dialog
+          open={isConfirmationDialogOpen}
+          onClose={closeConfirmationDialog}
+          maxWidth="lg"
+        >
+          {isConfirmationDialogOpen && (
+            <Confirm
+              props={props}
+              selectedSeats={selectedSeats}
+              seatDetails={seatDetails}
+              onConfirm={confrimbook}
+            />
+          )}
+        </Dialog>
       </div>
     </div>
   );

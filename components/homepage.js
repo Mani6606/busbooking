@@ -168,7 +168,7 @@ const BusList = ({ onBackButtonClick }) => {
         onClose={handleCloseDialog}
         maxWidth="lg" // You can adjust this value as needed
       >
-        {selectedBus && <SeatSelection bus={selectedBus} />}
+        {selectedBus && <SeatSelection bus={selectedBus} callback={handleCloseDialog} />}
       </Dialog>
     </Container>
   );

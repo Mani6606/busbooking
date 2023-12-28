@@ -1,11 +1,39 @@
-/* .ticketDetail {
-  border: 1px solid black;
+.error {
+  padding: 0px;
+  color: red;
+  font-size: 13.5px;
+  margin-top: 0px;
+}
+.error p {
+  margin: 0; /* Remove default margin for the paragraph */
+}
+.errordetails {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-} */
-
+  /* background-color: #c8ece9; */
+  height: 40px;
+}
+.ticketDetail label {
+  padding-right: 5px;
+  padding-left: 5px;
+  font-weight: bold;
+}
+.ticketDetail {
+  display: flex;
+  flex-direction: column;
+  /* background-color: #45a049; */
+  padding: 0px;
+  margin: 0px;
+}
+.smalldetail {
+  display: flex;
+}
+.ticketDetail h3 {
+  padding: 0px;
+  margin-bottom: 10px;
+  margin-top: 0px;
+  /* color: #ec79d5; */
+}
 .legend {
   border: 1px solid black;
   width: 10%;
@@ -164,8 +192,10 @@
 }
 .seat.femalereserved {
   /* background-color: #ef6a6a7c; */
-  border: 3px solid rgb(255, 5, 209);
-  border-radius: 6px;
+  border-radius: 1px;
+  /* background-color: #45a049; */
+  border: 3px solid rgb(253, 6, 195); /* Adjust the border style as needed */
+  box-sizing: border-box;
 }
 .selectedseats {
   display: flex;
@@ -276,9 +306,12 @@
   background-color: #ff00a27c;
 }
 .firstSeatub.femalereserved {
-  /* background-color: #ef6a6a7c; */
-  border: 3px solid rgb(255, 5, 209);
+  height: 73px;
+  width: 38px;
   border-radius: 9px;
+  /* background-color: #45a049; */
+  border: 3px solid rgb(253, 6, 195); /* Adjust the border style as needed */
+  box-sizing: border-box;
 }
 /* ------------------------------------------------------------- */
 .firstSeatub1 {

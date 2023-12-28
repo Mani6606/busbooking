@@ -9,19 +9,20 @@ import SSeatIcon from "./seatsvg";
 // ============================================================================================================================================
 
 export default function SeatSelection({ bus }) {
-  console.log(
-    "bus=============================================================",
-    bus
-  );
   // ----------code to add the selected seats to an array to send server side----------------------------
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seatDetails, setSeatDetails] = useState([]);
+  // const [nameerror, setNameerror] = useState(false);
+  // const [ageerror, setAgeerror] = useState(false);
+  // const [gendererror, setGendererror] = useState(false);
+  const [nameErrors, setNameErrors] = useState({});
+  const [ageErrors, setAgeErrors] = useState({});
+  const [genderErrors, setGenderErrors] = useState({});
   // ==========================================INTIAL FETCHING THE SEATS=======================================================================
   const [props, setProps] = useState({});
   const [busdetails, setBusdetails] = useState([]);
 
   const fetchSeatList = async () => {
-    console.log("for fetchlist================");
     try {
       const response = await fetch("/api/seatsbooking", {
         method: "POST",
@@ -35,9 +36,6 @@ export default function SeatSelection({ bus }) {
         const data = await response.json();
         setProps(data.formData);
         setBusdetails(data.formData.seats);
-        console.log("fromdata we get", data.formData.seats);
-        console.log("data from the backend", props);
-        console.log("data from the busdetails stste", busdetails); // Assuming the API response is an array of seat data
       } else {
         console.error("Failed to fetch seat data");
       }
@@ -48,25 +46,35 @@ export default function SeatSelection({ bus }) {
 
   // Call the fetchSeatList function when the component mounts
   useEffect(() => {
-    console.log("1");
     // This effect will run once when the component mounts
     fetchSeatList();
   }, []);
 
   // =========================================================================================================================================
   const handleSeatClick = (seatNo) => {
-    console.log();
+    console.log(selectedSeats);
     const clickedSeat = props.seats.find((seat) => seat.seatNo === seatNo);
     const selectedSeatsLength =
       Object.values(selectedSeats).filter(Boolean).length;
-    console.log(selectedSeatsLength);
-    if (clickedSeat && !clickedSeat.booked && selectedSeatsLength < 5) {
+    const isSeatSelecteds = selectedSeats.includes(seatNo);
+    if (clickedSeat.booked) {
+      alert("Seat Already Booked");
+      return;
+    }
+    if (
+      clickedSeat &&
+      !clickedSeat.booked &&
+      (selectedSeatsLength < 5 || isSeatSelecteds)
+    ) {
+      // Check if the seat number is in the specified ranges
+
       setSelectedSeats((prevSelectedSeats) => {
         const isSeatSelected = prevSelectedSeats.includes(seatNo);
         return isSeatSelected
           ? prevSelectedSeats.filter((selectedSeat) => selectedSeat !== seatNo)
           : [...prevSelectedSeats, seatNo];
       });
+
       setSeatDetails((prevSeatDetails) => {
         const existingDetail = prevSeatDetails.find(
           (detail) => detail.seatNo === seatNo
@@ -80,16 +88,24 @@ export default function SeatSelection({ bus }) {
         // Add a new empty object for the selected seat
         return [...prevSeatDetails, { seatNo, name: "", age: "", gender: "" }];
       });
-      console.log(seatDetails);
+
+      setNameErrors((prevNameErrors) => ({
+        ...prevNameErrors,
+        [seatNo]: false,
+      }));
+      setAgeErrors((prevAgeErrors) => ({ ...prevAgeErrors, [seatNo]: false }));
+      setGenderErrors((prevGenderErrors) => ({
+        ...prevGenderErrors,
+        [seatNo]: false,
+      }));
     } else {
-      alert("maximun reached");
+      alert("Maximum seats reached");
     }
   };
 
   //  ===============================SEAT LAYOUT START==============================================================================================
 
   const renderSeats = () => {
-    console.log("testing at  sclice ", props.seats);
     // =========================================1==================================================================================================
     const firstFiveSeats = props.seats.slice(0, 5).map((seat) => (
       <div
@@ -98,6 +114,7 @@ export default function SeatSelection({ bus }) {
         ${classes.firstSeat}
         ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
         ${seat.booked ? classes.booked : ""}
+        ${seat.booked && seat.gender === "female" ? classes.femalebooked : ""}
         `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
@@ -117,9 +134,11 @@ export default function SeatSelection({ bus }) {
       <div
         key={seat.seatNo}
         className={`
-        ${classes.seat} 
+          ${classes.seat} 
           ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
           ${seat.booked ? classes.booked : ""}
+          ${seat.gender === "female" && seat.booked ? classes.femalebooked : ""}
+          ${!seat.booked && seat.reserved ? classes.femalereserved : ""}
         `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
@@ -132,6 +151,7 @@ export default function SeatSelection({ bus }) {
         </div>
       </div>
     ));
+
     // ===================================================3======================================================================================
     const remainingSeats2 = props.seats.slice(15, 25).map((seat) => (
       <div
@@ -140,6 +160,9 @@ export default function SeatSelection({ bus }) {
           ${classes.seat} 
           ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
           ${seat.booked ? classes.booked : ""}
+          ${seat.booked && seat.gender === "female" ? classes.femalebooked : ""}
+          ${!seat.booked && seat.reserved ? classes.femalereserved : ""}
+
           `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
@@ -161,6 +184,7 @@ export default function SeatSelection({ bus }) {
         ${classes.firstSeatub1}
         ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
         ${seat.booked ? classes.booked : ""}
+        ${seat.booked && seat.gender === "female" ? classes.femalebooked : ""}
         
         `}
         onClick={() => handleSeatClick(seat.seatNo)}
@@ -184,7 +208,8 @@ export default function SeatSelection({ bus }) {
       ${classes.firstSeatub}
       ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
       ${seat.booked ? classes.booked : ""}
-      
+      ${seat.booked && seat.gender === "female" ? classes.femalebooked : ""}
+      ${!seat.booked && seat.reserved ? classes.femalereserved : ""}
       `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
@@ -206,7 +231,8 @@ export default function SeatSelection({ bus }) {
       ${classes.firstSeatub}
       ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
       ${seat.booked ? classes.booked : ""}
-      
+      ${seat.booked && seat.gender === "female" ? classes.femalebooked : ""}
+      ${!seat.booked && seat.reserved ? classes.femalereserved : ""}
       `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
@@ -224,8 +250,8 @@ export default function SeatSelection({ bus }) {
     return (
       <div className={classes.head}>
         <div className={classes.head1}>
-          <h2>LOWER DECK</h2>
-          <h2>UPPER DECK</h2>
+          <h3>LOWER DECK</h3>
+          <h3>UPPER DECK</h3>
         </div>
         <div className={classes.seatgrid}>
           <div className={classes.layoutlb}>
@@ -243,10 +269,6 @@ export default function SeatSelection({ bus }) {
     );
   };
   useEffect(() => {
-    console.log(
-      "1111111111111111111111111111111111111111111111111111111111112",
-      props
-    );
     if (props?.busno) {
       renderSeats();
     }
@@ -258,8 +280,40 @@ export default function SeatSelection({ bus }) {
 
   // ==================================== POST REQUEST TO API=================================================================================
   async function book() {
-    // Your booking logic here using selectedSeats array
-    console.log("Selected Seats:", selectedSeats);
+    console.log(selectedSeats, seatDetails);
+
+    // Validate seat details
+    const isSeatDetailsValid = seatDetails.every((detail) => {
+      const isValidName =
+        detail.name &&
+        detail.name.length >= 3 &&
+        /^[a-zA-Z ]+$/.test(detail.name);
+      const isValidAge = detail.age && detail.age > 5;
+      const isValidGender =
+        detail.gender &&
+        (detail.gender === "male" || detail.gender === "female");
+
+      // Log specific errors for each seat
+      if (!isValidName) {
+        alert(`Invalid name for seat ${detail.seatNo}`);
+        return;
+      }
+      if (!isValidAge) {
+        alert(`Invalid age for seat ${detail.seatNo}`);
+        return;
+      }
+      if (!isValidGender) {
+        alert(`Invalid gender for seat ${detail.seatNo}`);
+        return;
+      }
+
+      return isValidName && isValidAge && isValidGender;
+    });
+
+    // if (!isSeatDetailsValid) {
+    //   alert("Please correct the errors in the seat details.");
+    //   return;
+    // }
 
     try {
       // Send a POST request to your server to update the database
@@ -293,46 +347,150 @@ export default function SeatSelection({ bus }) {
   // ====================================================TICKET DETAILS======================================================================
 
   const renderTicketDetails = () => {
-    return selectedSeats.map((seatNo) => (
-      <div key={seatNo} className={classes.ticketDetail}>
-        <h3>{`Seat ${seatNo}`}</h3>
-        <label>Name:</label>
-        <input
-          type="text"
-          value={
-            seatDetails.find((detail) => detail.seatNo === seatNo)?.name || ""
-          }
-          onChange={(e) => handleInputChange(seatNo, "name", e.target.value)}
-        />
-        <label>Age:</label>
-        <input
-          type="text"
-          value={
-            seatDetails.find((detail) => detail.seatNo === seatNo)?.age || ""
-          }
-          onChange={(e) => handleInputChange(seatNo, "age", e.target.value)}
-        />
-        <label>Gender:</label>
-        <input
-          type="text"
-          value={
-            seatDetails.find((detail) => detail.seatNo === seatNo)?.gender || ""
-          }
-          onChange={(e) => handleInputChange(seatNo, "gender", e.target.value)}
-        />
-      </div>
-    ));
+    return selectedSeats.map((seatNo) => {
+      const seatDetail = seatDetails.find((detail) => detail.seatNo === seatNo);
+      const isSeatReservedForFemale = props.seats.find(
+        (seat) => seat.seatNo === seatNo
+      )?.reserved;
+
+      return (
+        <div key={seatNo} className={classes.ticketDetail}>
+          <div>
+            <h3>{`Seat ${seatNo}`}</h3>
+          </div>
+          <div className={classes.smalldetail}>
+            <label>Name:</label>
+
+            <div className={classes.errordetails}>
+              <input
+                type="text"
+                value={seatDetail?.name || ""}
+                // seatDetail.name === "" ? "required" :
+                placeholder="Enter your name"
+                onChange={(e) =>
+                  handleInputChange(seatNo, "name", e.target.value)
+                }
+              />
+              <div className={classes.error}>
+                {seatDetail.name === "" ? (
+                  <p>*required</p>
+                ) : (
+                  nameErrors[seatNo] && (
+                    <p>
+                      minimum of 3 characters. Should not allow numbers or any
+                      special characters.
+                    </p>
+                  )
+                )}
+              </div>
+            </div>
+
+            <label>Age:</label>
+            <div className={classes.errordetails}>
+              <input
+                type="number"
+                placeholder="Enter your age"
+                value={seatDetail?.age || ""}
+                onChange={(e) =>
+                  handleInputChange(seatNo, "age", e.target.value)
+                }
+              />
+              <div className={classes.error}>
+                {seatDetail.age === "" ? (
+                  <p>*required</p>
+                ) : (
+                  ageErrors[seatNo] && <p>age should be above 5</p>
+                )}
+              </div>
+            </div>
+
+            <label>Gender:</label>
+            <div className={classes.errordetails}>
+              {isSeatReservedForFemale ? (
+                <select
+                  value={seatDetail?.gender || ""}
+                  onChange={(e) =>
+                    handleInputChange(seatNo, "gender", e.target.value)
+                  }
+                >
+                  <option value="">Select Gender</option>
+                  <option value="female">Female</option>
+                </select>
+              ) : (
+                <select
+                  value={seatDetail?.gender || ""}
+                  onChange={(e) =>
+                    handleInputChange(seatNo, "gender", e.target.value)
+                  }
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              )}
+              <div className={classes.error}>
+                {seatDetail.gender === "" ? (
+                  <p>*required</p>
+                ) : (
+                  genderErrors[seatNo] && <p>mandatory</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    });
   };
 
   const handleInputChange = (seatNo, field, value) => {
+    if (field === "name") {
+      if (value && value.length > 3 && !!/^[a-zA-Z ]+$/.test(value)) {
+        console.log("name satisfying the above criteria");
+        setNameErrors((prevNameErrors) => ({
+          ...prevNameErrors,
+          [seatNo]: false,
+        }));
+      } else {
+        console.error(
+          "Name is mandatory and should be at least 3 characters long."
+        );
+        setNameErrors((prevNameErrors) => ({
+          ...prevNameErrors,
+          [seatNo]: true,
+        }));
+      }
+    } else if (field === "age") {
+      if (value && value > 5) {
+        console.log("age satisfying the above criteria");
+        setAgeErrors((prevAgeErrors) => ({
+          ...prevAgeErrors,
+          [seatNo]: false,
+        }));
+      } else {
+        console.error(
+          "age is mandatory and should be at greater than 5 characters long."
+        );
+        setAgeErrors((prevAgeErrors) => ({ ...prevAgeErrors, [seatNo]: true }));
+      }
+    } else {
+      if (!value) {
+        console.error("gender is mandatory");
+        setGenderErrors((prevGenderErrors) => ({
+          ...prevGenderErrors,
+          [seatNo]: true,
+        }));
+      } else {
+        setGenderErrors((prevGenderErrors) => ({
+          ...prevGenderErrors,
+          [seatNo]: false,
+        }));
+      }
+    }
     const updatedDetails = seatDetails.map((detail) =>
       detail.seatNo === seatNo ? { ...detail, [field]: value } : detail
     );
-
     setSeatDetails(updatedDetails);
   };
-
-  const handleSubmit = () => {};
 
   // ==========================================================================================================================================
   return (
@@ -364,7 +522,12 @@ export default function SeatSelection({ bus }) {
               <h5>-Reserved For Female passenger</h5>
             </div>
           </div>
-          <div className={classes.ticketdetails}>{renderTicketDetails()}</div>
+          <div className={classes.ticketdetails}>
+            <div>
+              <h3>Ticket Details</h3>
+            </div>
+            {renderTicketDetails()}
+          </div>
         </div>
       </div>
 
