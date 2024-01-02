@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
-
-import classes from "./testing.module.css";
+import { Dialog } from "@mui/material";
+import classes from "./seats.module.css";
 import SeatIcon from "./svg";
 import SSeatIcon from "./seatsvg";
-
-// =========================================PASSENGER COMPONENT============================================================================
-
-// ============================================================================================================================================
-
-export default function SeatSelection({ bus }) {
-  // ----------code to add the selected seats to an array to send server side----------------------------
+import Confirm from "./confrimbooking";
+import { useRouter } from "next/router";
+export default function SeatSelection({ bus, callback }) {
+  const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seatDetails, setSeatDetails] = useState([]);
   // const [nameerror, setNameerror] = useState(false);
@@ -17,11 +14,11 @@ export default function SeatSelection({ bus }) {
   // const [gendererror, setGendererror] = useState(false);
   const [nameErrors, setNameErrors] = useState({});
   const [ageErrors, setAgeErrors] = useState({});
+
   const [genderErrors, setGenderErrors] = useState({});
   // ==========================================INTIAL FETCHING THE SEATS=======================================================================
   const [props, setProps] = useState({});
-  const [busdetails, setBusdetails] = useState([]);
-
+  const router = useRouter;
   const fetchSeatList = async () => {
     try {
       const response = await fetch("/api/seatsbooking", {
@@ -52,22 +49,23 @@ export default function SeatSelection({ bus }) {
 
   // =========================================================================================================================================
   const handleSeatClick = (seatNo) => {
-    console.log(selectedSeats);
+    console.log("props", props);
     const clickedSeat = props.seats.find((seat) => seat.seatNo === seatNo);
+    console.log(clickedSeat);
     const selectedSeatsLength =
       Object.values(selectedSeats).filter(Boolean).length;
-    const isSeatSelecteds = selectedSeats.includes(seatNo);
+    const isSeatSelected = selectedSeats.includes(seatNo);
+
     if (clickedSeat.booked) {
       alert("Seat Already Booked");
       return;
     }
+
     if (
       clickedSeat &&
       !clickedSeat.booked &&
-      (selectedSeatsLength < 5 || isSeatSelecteds)
+      (selectedSeatsLength < 5 || isSeatSelected)
     ) {
-      // Check if the seat number is in the specified ranges
-
       setSelectedSeats((prevSelectedSeats) => {
         const isSeatSelected = prevSelectedSeats.includes(seatNo);
         return isSeatSelected
@@ -76,13 +74,15 @@ export default function SeatSelection({ bus }) {
       });
 
       setSeatDetails((prevSeatDetails) => {
-        const existingDetail = prevSeatDetails.find(
+        const existingDetailIndex = prevSeatDetails.findIndex(
           (detail) => detail.seatNo === seatNo
         );
 
-        if (existingDetail) {
-          // If details exist, don't add new empty object
-          return prevSeatDetails;
+        if (existingDetailIndex !== -1) {
+          // If details exist, remove the existing detail
+          const updatedSeatDetails = [...prevSeatDetails];
+          updatedSeatDetails.splice(existingDetailIndex, 1);
+          return updatedSeatDetails;
         }
 
         // Add a new empty object for the selected seat
@@ -277,11 +277,53 @@ export default function SeatSelection({ bus }) {
     // }, 2000);
   }, [props]);
   // ================================SEAT LAYOUT END ==========================================================================================
+  const openConfirmationDialog = () => {
+    setConfirmationDialogOpen(true);
+  };
 
+  const closeConfirmationDialog = () => {
+    setConfirmationDialogOpen(false);
+  };
   // ==================================== POST REQUEST TO API=================================================================================
-  async function book() {
-    console.log(selectedSeats, seatDetails);
+  async function confrimbook() {
+    try {
+      // Send a POST request to your server to update the database
+      const response = await fetch("/api/buslist", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          busNo: props.busNo,
+          selectedSeats,
+          seatDetails,
+        }),
+      });
 
+      if (response.ok) {
+        console.log("Booking successful");
+
+        // Clear selected seats after booking
+        setSelectedSeats([]);
+        setSeatDetails([]);
+        callback();
+        // closeConfirmationDialog();
+      } else {
+        console.log("Booking failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  async function book() {
+    console.log("selectedSeats and seatDEtails", selectedSeats, seatDetails);
+    const selectedSeatsLength =
+      Object.values(selectedSeats).filter(Boolean).length;
+    if (selectedSeatsLength === 0) {
+      alert("no seats selected");
+      return;
+    }
     // Validate seat details
     const isSeatDetailsValid = seatDetails.every((detail) => {
       const isValidName =
@@ -314,32 +356,10 @@ export default function SeatSelection({ bus }) {
     //   alert("Please correct the errors in the seat details.");
     //   return;
     // }
-
-    try {
-      // Send a POST request to your server to update the database
-      const response = await fetch("/api/buslist", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          busNo: props.busNo,
-          selectedSeats,
-          seatDetails,
-        }),
-      });
-
-      if (response.ok) {
-        console.log("Booking successful");
-
-        // Clear selected seats after booking
-        setSelectedSeats([]);
-        setSeatDetails([]);
-      } else {
-        console.log("Booking failed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
+    if (isSeatDetailsValid) {
+      openConfirmationDialog();
+    } else {
+      alert("check the seat details");
     }
   }
   // =========================================================================================================================================
@@ -347,6 +367,7 @@ export default function SeatSelection({ bus }) {
   // ====================================================TICKET DETAILS======================================================================
 
   const renderTicketDetails = () => {
+    console.log(selectedSeats);
     return selectedSeats.map((seatNo) => {
       const seatDetail = seatDetails.find((detail) => detail.seatNo === seatNo);
       const isSeatReservedForFemale = props.seats.find(
@@ -445,15 +466,15 @@ export default function SeatSelection({ bus }) {
   const handleInputChange = (seatNo, field, value) => {
     if (field === "name") {
       if (value && value.length > 3 && !!/^[a-zA-Z ]+$/.test(value)) {
-        console.log("name satisfying the above criteria");
+        // console.log("name satisfying the above criteria");
         setNameErrors((prevNameErrors) => ({
           ...prevNameErrors,
           [seatNo]: false,
         }));
       } else {
-        console.error(
-          "Name is mandatory and should be at least 3 characters long."
-        );
+        // console.error(
+        //   "Name is mandatory and should be at least 3 characters long."
+        // );
         setNameErrors((prevNameErrors) => ({
           ...prevNameErrors,
           [seatNo]: true,
@@ -461,20 +482,20 @@ export default function SeatSelection({ bus }) {
       }
     } else if (field === "age") {
       if (value && value > 5) {
-        console.log("age satisfying the above criteria");
+        // console.log("age satisfying the above criteria");
         setAgeErrors((prevAgeErrors) => ({
           ...prevAgeErrors,
           [seatNo]: false,
         }));
       } else {
-        console.error(
-          "age is mandatory and should be at greater than 5 characters long."
-        );
+        // console.error(
+        //   "age is mandatory and should be at greater than 5 characters long."
+        // );
         setAgeErrors((prevAgeErrors) => ({ ...prevAgeErrors, [seatNo]: true }));
       }
     } else {
       if (!value) {
-        console.error("gender is mandatory");
+        // console.error("gender is mandatory");
         setGenderErrors((prevGenderErrors) => ({
           ...prevGenderErrors,
           [seatNo]: true,
@@ -523,17 +544,29 @@ export default function SeatSelection({ bus }) {
             </div>
           </div>
           <div className={classes.ticketdetails}>
-            <div>
+            <div className={classes.tk}>
               <h3>Ticket Details</h3>
             </div>
             {renderTicketDetails()}
           </div>
         </div>
-      </div>
-
-      <div className={classes.selectedseats}>
-        <p>Selected Seats: {selectedSeats.join(", ")}</p>
-        <button onClick={book}>Book</button>
+        <div className={classes.selectedseats}>
+          <button onClick={book}>Book</button>
+          <Dialog
+            open={isConfirmationDialogOpen}
+            onClose={closeConfirmationDialog}
+            maxWidth="lg"
+          >
+            {isConfirmationDialogOpen && (
+              <Confirm
+                props={props}
+                selectedSeats={selectedSeats}
+                seatDetails={seatDetails}
+                onConfirm={confrimbook}
+              />
+            )}
+          </Dialog>
+        </div>
       </div>
     </div>
   );

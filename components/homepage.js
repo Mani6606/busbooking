@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import SeatSelection from "./testing";
+import SeatSelection from "./seats";
 import classes from "./homepage.module.css";
+import Image from "next/image";
 import {
   Container,
   Box,
@@ -91,45 +92,43 @@ const BusList = ({ onBackButtonClick }) => {
   const handleCloseDialog = () => {
     setSelectedBus(null);
   };
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
+  };
 
   return (
-    <Container>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row", // Change "column" to "row"
-          alignItems: "center",
-          justifyContent: "center",
-          height: "80vh",
-          flexWrap: "wrap",
-          // Allow items to wrap to the next row
-        }}
-      >
-        <List>
-          {busList.map((bus) => (
-            <ListItem
-              key={bus._id}
-              sx={{
-                border: "1px solid #000000",
-                borderRadius: "8px",
-                marginBottom: "20px",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <ListItemText
+    <>
+      <div className={classes.header}>
+        <Image width={150} height={80} src="/logo.jpg"></Image>
 
-              // maxWidth="lg"
-              // sx={{
-              //   display: "flex",
-              //   flexDirection: "row", // Keep it as "row"
-              //   justifyContent: "space-between", // Optional: Adjust the spacing between elements
-              //   alignItems: "center",
-              //   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              //   width: "100%",
-              //   height: "100%", // Set height to 100%
-              //   // backgroundColor: "#4caf50",
-              // }}
-              >
+        <h2>welcome for online ticket reservation system</h2>
+        <Button
+          variant="contained"
+          size="medium"
+          style={{
+            backgroundColor: "red",
+          }}
+          onClick={handleLogout}
+        >
+          LogOut
+        </Button>
+      </div>
+
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row", // Change "column" to "row"
+            alignItems: "center",
+            justifyContent: "center",
+            height: "80vh",
+            flexWrap: "wrap",
+            // Allow items to wrap to the next row
+          }}
+        >
+          <List>
+            {busList.map((bus) => (
+              <div className={classes.listfull}>
                 <div className={classes.list}>
                   <div className={classes.heading}>Bus No: </div>
                   <div className={classes.value}>{bus.formData.busNo}</div>
@@ -146,31 +145,33 @@ const BusList = ({ onBackButtonClick }) => {
                     {bus.formData.arrivalTime}
                   </div>
                 </div>
-              </ListItemText>
 
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleViewSeats(bus._id)}
-                sx={{ color: "blue", fontWeight: "bold" }}
-              >
-                View Seats
-              </Button>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => handleViewSeats(bus._id)}
+                  sx={{ color: "blue", fontWeight: "bold" }}
+                >
+                  View Seats
+                </Button>
+              </div>
+            ))}
+          </List>
+        </Box>
 
-      {/* Dialog to display seat status */}
-      <Dialog
-        fullWidth
-        open={Boolean(selectedBus)}
-        onClose={handleCloseDialog}
-        maxWidth="lg" // You can adjust this value as needed
-      >
-        {selectedBus && <SeatSelection bus={selectedBus} callback={handleCloseDialog} />}
-      </Dialog>
-    </Container>
+        {/* Dialog to display seat status */}
+        <Dialog
+          fullWidth
+          open={Boolean(selectedBus)}
+          onClose={handleCloseDialog}
+          maxWidth="lg" // You can adjust this value as needed
+        >
+          {selectedBus && (
+            <SeatSelection bus={selectedBus} callback={handleCloseDialog} />
+          )}
+        </Dialog>
+      </Container>
+    </>
   );
 };
 

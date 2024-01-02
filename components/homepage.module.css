@@ -1,3 +1,21 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(237, 175, 131, 0.591); /* Red background color */
+  border: 2px solid red;
+  height: 80px;
+}
+.header Button {
+  margin-right: 2%;
+}
+/* Optional: Style for the header text */
+.header h2 {
+  font-size: 34px;
+  color: #000000b8; /* A mix of red and rose colors */
+  /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); Shadow effect */
+}
+
 .box {
   width: 100%;
 }
@@ -7,10 +25,22 @@
   align-items: center;
   justify-content: center;
 }
-
+.listfull {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  border: 2px solid black;
+  padding: 20px;
+  width: 100%;
+  margin: 20px;
+  border-radius: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.764);
+}
 .heading {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 23px;
   margin-right: 5px;
 }
 
@@ -18,36 +48,4 @@
   font-weight: medium;
   font-size: 14px;
   margin-right: 20px;
-}
-
-.legend {
-  border: 2px solid black;
-}
-.notbooked {
-  height: 20px;
-  width: 20px;
-  background-color: #ffffff;
-  margin: 10px;
-  border: 1px solid black;
-}
-.booked {
-  height: 20px;
-  width: 20px;
-  background-color: #1816167c;
-  margin: 10px;
-  border: 1px solid black;
-}
-.bookedfemale {
-  height: 20px;
-  width: 20px;
-  background-color: #ec79d5;
-  margin: 10px;
-  border: 1px solid black;
-}
-.reserved {
-  height: 17px;
-  width: 17px;
-  background-color: rgba(16, 244, 58, 0.973);
-  margin: 10px;
-  border: 3px solid rgb(241, 12, 207);
 }

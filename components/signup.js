@@ -15,7 +15,7 @@ function Header(props) {
     </>
   );
 }
-export default function SignUp() {
+export default function SignUp({ props }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confrimpassword, setConfrimpassword] = useState("");
@@ -122,6 +122,7 @@ export default function SignUp() {
     }
     setLoading(false);
   }
+
   useEffect(() => {
     // Wrap the code in a "DOMContentLoaded" event listener
     document.addEventListener("DOMContentLoaded", function () {
@@ -132,78 +133,77 @@ export default function SignUp() {
     });
   }, []);
   return (
-    <Header>
-      <div className={classes.signupcontainer}>
-        <div className={classes.signupform}>
-          <h1>Sign Up</h1>
+    <div className={classes.signupcontainer}>
+      <div className={classes.signupform}>
+        <h1>Sign Up</h1>
 
-          <form>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                placeholder="Email id "
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className={classes.signupinput}
-              />
-              <div className={classes.error}>{emailError}</div>
-            </div>
-            <div>
-              <label htmlFor="password">Password</label>
-              <input
-                type={inputType}
-                id="password"
-                value={password}
-                placeholder="password"
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className={classes.signupinput}
-              />
-              <button
-                className={classes.visiblebutton}
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <FiEye /> : <FiEyeOff />}
-              </button>
-              <div className={classes.error}>{passwordError}</div>
-              <label htmlFor="password">Confrim Password</label>
-              <input
-                type={inputTypecon}
-                id="confrimpassword"
-                value={confrimpassword}
-                placeholder="confrim password"
-                onChange={(e) => setConfrimpassword(e.target.value)}
-                required
-                className={classes.signupinput}
-              />
-              <button
-                className={classes.visiblebutton}
-                onClick={togglePasswordVisibilitycon}
-              >
-                {showPasswordcon ? <FiEye /> : <FiEyeOff />}
-              </button>
-              <div className={classes.error}>{passwordcheck}</div>
-            </div>
+        <form>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            placeholder="Email id "
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className={classes.signupinput}
+          />
+          <div className={classes.error}>{emailError}</div>
 
-            <center>
-              <button
-                type="button"
-                onClick={handleSignUp}
-                className={classes.signupbutton}
-              >
-                {loading ? "Signing in..." : "Sign Up"}
-              </button>
-            </center>
-            <div className={classes.loginoption}>
-              <h4>Already having an account </h4>
-              <Link href="/">SignIn</Link>
-            </div>
-          </form>
-        </div>
+          <div>
+            <label htmlFor="password">Password</label>
+            <input
+              type={inputType}
+              id="password"
+              value={password}
+              placeholder="password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className={classes.signupinput}
+            />
+            <button
+              className={classes.visiblebutton}
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? <FiEye /> : <FiEyeOff />}
+            </button>
+            <div className={classes.error}>{passwordError}</div>
+            <label htmlFor="password">Confrim Password</label>
+            <input
+              type={inputTypecon}
+              id="confrimpassword"
+              value={confrimpassword}
+              placeholder="confrim password"
+              onChange={(e) => setConfrimpassword(e.target.value)}
+              required
+              className={classes.signupinput}
+            />
+            <button
+              className={classes.visiblebutton}
+              onClick={togglePasswordVisibilitycon}
+            >
+              {showPasswordcon ? <FiEye /> : <FiEyeOff />}
+            </button>
+            <div className={classes.error}>{passwordcheck}</div>
+          </div>
+
+          <center>
+            <button
+              type="button"
+              onClick={handleSignUp}
+              className={classes.signupbutton}
+            >
+              {loading ? "Signing in..." : "Sign Up"}
+            </button>
+          </center>
+          <div className={classes.loginoption}>
+            <h4>Already having an account </h4>
+            <Link href="" onClick={props}>
+              SignIn
+            </Link>
+          </div>
+        </form>
       </div>
-    </Header>
+    </div>
   );
 }

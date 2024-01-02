@@ -4,20 +4,24 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-
-
+import SignUp from "./signup";
+import Image from "next/image";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userpassword, setUserpassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
+  const [isSignUp, setIsSignUp] = useState(false);
   const togglePasswordVisibility = (event) => {
     event.preventDefault();
     setShowPassword(!showPassword);
   };
-
+  const switchsignin = (event) => {
+    event.preventDefault();
+    setIsSignUp((prevIsSignup) => !prevIsSignup);
+  };
   const inputType = showPassword ? "text" : "password";
 
   function setDetails() {
@@ -28,8 +32,7 @@ export default function Login() {
     setUserpassword("");
   }, [email, password]);
   async function loginHandler() {
-    if(email==="admin@gmail.com" && password==="admin@1234")
-    {
+    if (email === "admin@gmail.com" && password === "admin@1234") {
       setLoading(true);
       setUserpassword("");
       const response = await signIn("credentials", {
@@ -37,7 +40,7 @@ export default function Login() {
         Email: email,
         Password: password,
       });
-      
+
       if (response.ok) {
         console.log("success");
         console.log(response);
@@ -48,11 +51,9 @@ export default function Login() {
         setUserpassword("Invalid Username or password");
         setTimeout(setDetails, 400);
       }
-      
-      setLoading(false);
-    }
-    else{
 
+      setLoading(false);
+    } else {
       setLoading(true);
       setUserpassword("");
       const response = await signIn("credentials", {
@@ -60,7 +61,7 @@ export default function Login() {
         Email: email,
         Password: password,
       });
-      
+
       if (response.ok) {
         console.log("success");
         console.log(response);
@@ -71,12 +72,12 @@ export default function Login() {
         setUserpassword("Invalid Username or password");
         setTimeout(setDetails, 400);
       }
-      
+
       setLoading(false);
     }
-    }
-    // JavaScript to add the class to trigger the animation
-    useEffect(() => {
+  }
+  // JavaScript to add the class to trigger the animation
+  useEffect(() => {
     // Wrap the code in a "DOMContentLoaded" event listener
     document.addEventListener("DOMContentLoaded", function () {
       const signupForm = document.querySelector(".signupform");
@@ -85,16 +86,21 @@ export default function Login() {
       }
     });
   }, []);
+
   return (
     <div className={classes.fullpage}>
-     <div className={classes.header}>
+      <Image
+        src="/background.jpg" // Replace with the actual path to your image
+        alt="Background Image"
+        layout="fill"
+        objectFit="cover"
+      />
+      <div className={classes.header}>
         <h1>Welcome!</h1>
       </div>
-     {/* <div className={classes.switch}>
-         <button> Login</button>
-         <button>Signup</button>
-        
-     </div> */}
+      {isSignUp ? (
+        <SignUp props={switchsignin} />
+      ) : (
         <div className={classes.signupcontainer}>
           <div className={classes.signupform}>
             <h1>Login</h1>
@@ -127,7 +133,7 @@ export default function Login() {
                     className={classes.visiblebutton}
                     onClick={togglePasswordVisibility}
                   >
-                    {showPassword ? <FiEye /> : <FiEyeOff />}
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
                 </div>
                 <div className={classes.error}>{userpassword}</div>
@@ -143,11 +149,13 @@ export default function Login() {
               </center>
             </form>
             <center className={classes.register}>
-              <Link href="/signup">Register</Link>
+              <Link href="" onClick={switchsignin}>
+                SignUp
+              </Link>
             </center>
           </div>
         </div>
-     
+      )}
     </div>
   );
 }
