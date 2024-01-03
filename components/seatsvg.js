@@ -10,7 +10,7 @@ const SSeatIcon = () => {
         height="3"
         rx="5"
         ry="5"
-        style={{ fill: "white", strokeWidth: 1, stroke: "rgb(0,0,0)" }}
+        style={{ fill: "white", strokeWidth: 1, stroke: "green" }}
       />
       <rect
         x="0"
@@ -19,7 +19,7 @@ const SSeatIcon = () => {
         height="15"
         rx="5"
         ry="5"
-        style={{ fill: "white", strokeWidth: 1, stroke: "rgb(0,0,0)" }}
+        style={{ fill: "white", strokeWidth: 1, stroke: "green" }}
       />
       <rect
         x="18"
@@ -28,7 +28,7 @@ const SSeatIcon = () => {
         height="15"
         rx="5"
         ry="5"
-        style={{ fill: "white", strokeWidth: 1, stroke: "rgb(0,0,0)" }}
+        style={{ fill: "white", strokeWidth: 1, stroke: "green" }}
       />
 
       <line
@@ -36,7 +36,7 @@ const SSeatIcon = () => {
         y1="0"
         x2="20"
         y2="0"
-        style={{ stroke: "black", strokeWidth: 2 }}
+        style={{ stroke: "green", strokeWidth: 2 }}
       />
 
       <line
@@ -44,14 +44,14 @@ const SSeatIcon = () => {
         y1="0"
         x2="1.5"
         y2="9"
-        style={{ stroke: "black", strokeWidth: 1 }}
+        style={{ stroke: "green", strokeWidth: 1 }}
       />
       <line
         x1="19.5"
         y1="0"
         x2="19.5"
         y2="9"
-        style={{ stroke: "black", strokeWidth: 1 }}
+        style={{ stroke: "green", strokeWidth: 1 }}
       />
     </svg>
   );

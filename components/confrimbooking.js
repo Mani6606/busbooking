@@ -9,16 +9,35 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import { useState } from "react";
+import Loader from "./loaders/bookingloader";
+import classes from "./confrimbooking.module.css";
 export default function Confirm({
   props,
   seatDetails,
   selectedSeats,
   onConfirm,
 }) {
+  console.log("seatdetails ---------------------", seatDetails);
   // Calculate total cost based on the prices associated with selected seats
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const totalCost = selectedSeats.reduce((total, seatNo) => {
     const seat = props.seats.find((seat) => seat.seatNo === seatNo);
+
+    const seatIndex = seatDetails.findIndex(
+      (seats) => seats.seatNo === seat.seatNo
+    );
+
+    const details = seatDetails[seatIndex];
+    console.log("asdddddddddddddddddddddddddddddddddddddddseat", details);
+    seatDetails[seatIndex] = {
+      seatNo: seatNo,
+      price: seat.price,
+      name: details.name,
+      age: details.age,
+      gender: details.gender,
+      // Add other properties if needed
+    };
+
     return total + (seat ? seat.price : 0);
   }, 0);
   const handleConfirm = () => {
@@ -28,151 +47,188 @@ export default function Confirm({
     onConfirm();
   };
   return (
-    <Container>
+    <Container sx={{ position: "relative" }}>
       {bookingSuccess && (
+        // <Box
+        //   mt={10}
+        //   sx={{
+        //     position: "absolute",
+        //     marginLeft: "40%",
+        //     textAlign: "center",
+        //     backgroundColor: "#4CAF50", // Green background color
+        //     color: "white",
+        //     padding: "15px",
+        //     borderRadius: "5px",
+        //     width: "200px",
+        //     display: "flex",
+        //     justifyContent: "center",
+        //     alignItems: "center",
+        //     boxShadow: "4px 4px 4px 4px #4CAF50",
+        //   }}
+        // >
+        //   <Typography variant="h6">Booking Successful!</Typography>
+        // </Box>
+        <Loader />
+      )}
+
+      <div className={bookingSuccess && classes.dimmed}>
+        <Box
+          sx={{
+            textAlign: "center",
+            mt: 1,
+            mb: 1,
+          }}
+        >
+          <Typography
+            variant="h4"
+            sx={{
+              color: "#006f41ef",
+              fontFamily: "bold",
+              textShadow: "1px 1px 2px rgba(20, 29, 29, 0.973)",
+            }}
+          >
+            Confirmation Details
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            textAlign: "center",
+            mt: 1,
+            mb: 1,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            border: "0px solid black",
+            boxShadow: "4px 4px 6px rgba(20, 29, 29, 0.973)",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: "25px",
+              paddingLeft: "10px",
+              color: "#006f41ef",
+            }}
+          >
+            <strong>Bus No</strong> {props.busNo}
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: "bold",
+              fontSize: "26px",
+              color: "#ff7700c5",
+              padding: "10px",
+            }}
+          >
+            <strong>From</strong> {props.from}
+          </Typography>
+          <Typography
+            sx={{ fontSize: "26px", color: "#0871bde3", padding: "10px" }}
+          >
+            <strong>To</strong> {props.to}
+          </Typography>
+          <Typography
+            sx={{ fontSize: "26px", color: "#ff7700c5", padding: "10px" }}
+          >
+            <strong>Departure Time</strong> {props.departureTime}
+          </Typography>
+          <Typography
+            sx={{ fontSize: "26px", color: "#006f41ef", padding: "10px" }}
+          >
+            <strong>Arrival Time </strong> {props.arrivalTime}
+          </Typography>
+        </Box>
         <Box
           mt={3}
           sx={{
-            marginLeft: "40%",
             textAlign: "center",
-            backgroundColor: "#4CAF50", // Green background color
-            color: "white",
-            padding: "15px",
-            borderRadius: "5px",
-            width: "200px",
+            mt: 1,
+            mb: 1,
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            boxShadow: "4px 4px 4px 4px #4CAF50",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            border: "0px solid black",
+            boxShadow: "4px 4px 6px rgba(20, 29, 29, 0.973)",
           }}
         >
-          <Typography variant="h6">Booking Successful!</Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              fontSize: "35px",
+              color: "#ff7700c5",
+              fontFamily: "bold",
+              textShadow: "1px 1px 2px rgba(255, 119, 0, 0.773)",
+            }}
+          >
+            Passenger Details:
+          </Typography>
+          <TableContainer>
+            <Table>
+              <TableBody>
+                {seatDetails.map((detail) => (
+                  <TableRow key={detail.seatNo}>
+                    <TableCell sx={{ fontSize: "18px", color: "#006f41ef" }}>
+                      <strong>Seat No:</strong> {detail.seatNo}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "18px", color: "#0871bde3" }}>
+                      <strong>Name:</strong> {detail.name}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "18px", color: "#0871bde3" }}>
+                      <strong>Age:</strong> {detail.age}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "18px", color: "#006f41ef" }}>
+                      <strong>Gender:</strong> {detail.gender}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "18px", color: "#000000c5" }}>
+                      <strong>Price:</strong> {detail.price}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
-      )}
-
-      <Box
-        sx={{
-          textAlign: "center",
-          mt: 4,
-          mb: 4,
-        }}
-      >
-        <Typography
-          variant="h4"
-          sx={{
-            color: "#3e3b3bf8",
-            fontFamily: "bold",
-            textShadow: "1px 1px 1px rgba(20, 29, 29, 0.973)",
-          }}
-        >
-          Confirmation Details
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          textAlign: "center",
-          mt: 4,
-          mb: 4,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          border: "1px solid black",
-          boxShadow: "4px 4px 6px rgba(20, 29, 29, 0.973)",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: "25px",
-            paddingLeft: "10px",
-            color: "#3e3b3bf8",
-          }}
-        >
-          <strong>Bus No:</strong> {props.busNo}
-        </Typography>
-        <Typography sx={{ fontSize: "25px", color: "#3e3b3bf8" }}>
-          <strong>From:</strong> {props.from}
-        </Typography>
-        <Typography sx={{ fontSize: "25px", color: "#3e3b3bf8" }}>
-          <strong>To:</strong> {props.to}
-        </Typography>
-        <Typography sx={{ fontSize: "25px", color: "#3e3b3bf8" }}>
-          <strong>DepartureTime :</strong> {props.departureTime}
-        </Typography>
-        <Typography sx={{ fontSize: "25px", color: "#3e3b3bf8" }}>
-          <strong>ArrivalTime :</strong> {props.arrivalTime}
-        </Typography>
-      </Box>
-      <Box
-        mt={3}
-        sx={{
-          textAlign: "center",
-          mt: 4,
-          mb: 4,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          border: "1px solid black",
-          boxShadow: "4px 4px 6px rgba(20, 29, 29, 0.973)",
-        }}
-      >
-        <Typography
-          variant="h5"
-          sx={{
-            fontSize: "28px",
-            color: "#3e3b3bf8",
-            fontFamily: "bold",
-            textShadow: "1px 1px 1px rgba(20, 29, 29, 0.973)",
-          }}
-        >
-          Passenger Details:
-        </Typography>
-        <TableContainer>
-          <Table>
-            <TableBody>
-              {seatDetails.map((detail) => (
-                <TableRow key={detail.seatNo}>
-                  <TableCell sx={{ fontSize: "18px", color: "#3e3b3bf8" }}>
-                    <strong>Seat No:</strong> {detail.seatNo}
-                  </TableCell>
-                  <TableCell sx={{ fontSize: "18px", color: "#3e3b3bf8" }}>
-                    <strong>Name:</strong> {detail.name}
-                  </TableCell>
-                  <TableCell sx={{ fontSize: "18px", color: "#3e3b3bf8" }}>
-                    <strong>Age:</strong> {detail.age}
-                  </TableCell>
-                  <TableCell sx={{ fontSize: "18px", color: "#3e3b3bf8" }}>
-                    <strong>Gender:</strong> {detail.gender}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-      <Box mt={3}>
-        <Typography
-          variant="h6"
+        <Box
+          mt={1}
           sx={{
             display: "flex",
-            alignContent: "center",
-            justifyContent: "end",
-            fontFamily: "bold",
-            fontSize: "25px",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: "row",
           }}
         >
-          <strong>Total Cost:</strong> ${totalCost}
-        </Typography>
-      </Box>
-      <Box mt={3} sx={{ textAlign: "center" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleConfirm}
-          sx={{ margin: "20px" }}
-        >
-          Confirm Booking
-        </Button>
-      </Box>
+          {/* </Box>
+      <Box mt={1} sx={{ textAlign: "center" }}> */}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleConfirm}
+            sx={{
+              margin: "20px",
+              marginLeft: "450px",
+              ":hover": {
+                backgroundColor: "darken(primary.main, 0.9)",
+
+                boxShadow: "0px 0px 10px 1px blue", // Move boxShadow here
+              },
+            }}
+          >
+            Confirm Booking
+          </Button>
+          <Typography
+            variant="h6"
+            sx={{
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "end",
+              fontFamily: "bold",
+              fontSize: "25px",
+              marginRight: "50px",
+            }}
+          >
+            <strong>Total Cost:</strong> ${totalCost}
+          </Typography>
+        </Box>
+      </div>
     </Container>
   );
 }

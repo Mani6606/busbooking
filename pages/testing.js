@@ -1,4 +1,4 @@
-import SeatSelection from "../components/testing";
+import App from "../components/testing";
 export default function Ts() {
-  return <SeatSelection />;
+  return <App />;
 }

@@ -18,7 +18,7 @@ const SeatIcon = ({ selected, booked }) => {
         ry="8"
         style={{
           fill: seatStyle.fill,
-          stroke: "black",
+          stroke: "green",
           strokeWidth: 2,
           fillOpacity: 0.1,
           strokeOpacity: 0.9,
@@ -34,7 +34,7 @@ const SeatIcon = ({ selected, booked }) => {
         ry="5"
         style={{
           fill: seatStyle.fill,
-          stroke: "black",
+          stroke: "green",
           strokeWidth: 1.5,
           fillOpacity: 0.1,
           strokeOpacity: 0.9,

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      /* Styles for the toast container */
+      #toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
+      }
+    </style>
+    <script>
+      // Function to show the toast
+      function showToast(message) {
+        var toastContainer = document.getElementById("toast-container");
+        toastContainer.textContent = message;
+        toastContainer.style.display = "block";
+
+        // Hide the toast after a few seconds
+        setTimeout(function () {
+          toastContainer.style.display = "none";
+        }, 3000);
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Toast container element -->
+    <div id="toast-container"></div>
+
+    <!-- Button to trigger the toast -->
+    <button onclick="showToast('Hello, this is a toast!')">Show Toast</button>
+  </body>
+</html>

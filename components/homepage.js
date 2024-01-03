@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import SeatSelection from "./seats";
 import classes from "./homepage.module.css";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import {
   Container,
   Box,
@@ -21,10 +24,32 @@ import {
   TableRow,
 } from "@mui/material";
 
-const BusList = ({ onBackButtonClick }) => {
+const BusList = () => {
   const [busList, setBusList] = useState([]);
   const [selectedBus, setSelectedBus] = useState(null);
+  const router = useRouter();
+  // ==================use effect for  checking session===================================================================
+  useEffect(() => {
+    getSession().then((session) => {
+      if (!session) {
+        router.replace("/");
+      } else {
+        console.log(session.user.email);
+        console.log(session);
+      }
+    });
+  }, []);
+  // =============================================================================================================================
+  // ==================use effect for timeout  session===================================================================
+  useEffect(() => {
+    const logoutAfterTime = setTimeout(async () => {
+      await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
+    }, 10 * 60 * 1000); // 30 minutes in milliseconds
 
+    return () => clearTimeout(logoutAfterTime); // Clear the timeout on component unmount
+  }, []);
+  // =============================================================================================================================
+  // ==================use effect for fetch data===================================================================
   useEffect(() => {
     // Fetch bus list data from your API
     fetch("/api/buslist") // Update with your actual API endpoint
@@ -37,7 +62,7 @@ const BusList = ({ onBackButtonClick }) => {
         console.error("API Error:", error);
       });
   }, []);
-
+  // =============================================================================================================================
   const handleViewSeats = (_id) => {
     // Find the selected bus by _id
     const selected = busList.find((bus) => bus._id === _id);

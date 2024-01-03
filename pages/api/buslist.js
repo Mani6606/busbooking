@@ -24,11 +24,23 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const { formData } = req.body;
-      // console.log("formdata", formData);
-      const timestamp = new Date();
+      console.log("formdata", formData);
       const client = await ConnectToDatabase();
       const db = client.db("my-site");
       const collection = db.collection("buslist");
+
+      // Check if formData.busNo already exists in the collection
+      const existingBus = await collection.findOne({
+        "formData.busNo": formData.busNo,
+      });
+
+      if (existingBus) {
+        // If busNo already exists, send a response indicating it's a duplicate
+        client.close();
+        return res.status(400).json({ message: "Bus number already exists" });
+      }
+
+      // If busNo doesn't exist, insert the new document
       const result = await collection.insertOne({ formData });
 
       client.close();
@@ -38,6 +50,7 @@ export default async function handler(req, res) {
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
+
   // ==================================================DELETE================================================================================
   else if (req.method === "DELETE") {
     try {

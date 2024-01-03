@@ -5,6 +5,9 @@ import SeatIcon from "./svg";
 import SSeatIcon from "./seatsvg";
 import Confirm from "./confrimbooking";
 import { useRouter } from "next/router";
+import Popup from "./loaders/popup";
+
+import Seatsloader from "./loaders/seatsloader";
 export default function SeatSelection({ bus, callback }) {
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -14,7 +17,8 @@ export default function SeatSelection({ bus, callback }) {
   // const [gendererror, setGendererror] = useState(false);
   const [nameErrors, setNameErrors] = useState({});
   const [ageErrors, setAgeErrors] = useState({});
-
+  const [popup, setPopup] = useState(false);
+  const [msg, setMsg] = useState("");
   const [genderErrors, setGenderErrors] = useState({});
   // ==========================================INTIAL FETCHING THE SEATS=======================================================================
   const [props, setProps] = useState({});
@@ -57,7 +61,10 @@ export default function SeatSelection({ bus, callback }) {
     const isSeatSelected = selectedSeats.includes(seatNo);
 
     if (clickedSeat.booked) {
-      alert("Seat Already Booked");
+      // alert("Seat Already Booked");
+      setMsg("Seat Already Booked");
+      setPopup(true);
+
       return;
     }
 
@@ -99,7 +106,10 @@ export default function SeatSelection({ bus, callback }) {
         [seatNo]: false,
       }));
     } else {
-      alert("Maximum seats reached");
+      // alert("Maximum seats r?eached");
+      setMsg("Maximum seats reached");
+
+      setPopup(true);
     }
   };
 
@@ -321,7 +331,9 @@ export default function SeatSelection({ bus, callback }) {
     const selectedSeatsLength =
       Object.values(selectedSeats).filter(Boolean).length;
     if (selectedSeatsLength === 0) {
-      alert("no seats selected");
+      // alert("no seats selected");
+      setMsg("No seats selected");
+      setPopup(true);
       return;
     }
     // Validate seat details
@@ -337,15 +349,21 @@ export default function SeatSelection({ bus, callback }) {
 
       // Log specific errors for each seat
       if (!isValidName) {
-        alert(`Invalid name for seat ${detail.seatNo}`);
+        // alert(`Invalid name for seat ${detail.seatNo}`);
+        setMsg(`Invalid name for seat ${detail.seatNo}`);
+        setPopup(true);
         return;
       }
       if (!isValidAge) {
-        alert(`Invalid age for seat ${detail.seatNo}`);
+        // alert(`Invalid age for seat ${detail.seatNo}`);
+        setMsg(`Invalid age for seat ${detail.seatNo}`);
+        setPopup(true);
         return;
       }
       if (!isValidGender) {
-        alert(`Invalid gender for seat ${detail.seatNo}`);
+        // alert(`Invalid gender for seat ${detail.seatNo}`);
+        setMsg(`Invalid gender for seat ${detail.seatNo}`);
+        setPopup(true);
         return;
       }
 
@@ -359,7 +377,9 @@ export default function SeatSelection({ bus, callback }) {
     if (isSeatDetailsValid) {
       openConfirmationDialog();
     } else {
-      alert("check the seat details");
+      // alert("check the seat details");
+      // setMsg("Check the Seat Details");
+      // setPopup(true);
     }
   }
   // =========================================================================================================================================
@@ -393,16 +413,15 @@ export default function SeatSelection({ bus, callback }) {
                 }
               />
               <div className={classes.error}>
-                {seatDetail.name === "" ? (
-                  <p>*required</p>
-                ) : (
-                  nameErrors[seatNo] && (
-                    <p>
-                      minimum of 3 characters. Should not allow numbers or any
-                      special characters.
-                    </p>
-                  )
-                )}
+                {seatDetail.name === ""
+                  ? // <p>*required</p>
+                    ""
+                  : nameErrors[seatNo] && (
+                      <p>
+                        minimum of 3 characters. Should not allow numbers or any
+                        special characters.
+                      </p>
+                    )}
               </div>
             </div>
 
@@ -417,11 +436,9 @@ export default function SeatSelection({ bus, callback }) {
                 }
               />
               <div className={classes.error}>
-                {seatDetail.age === "" ? (
-                  <p>*required</p>
-                ) : (
-                  ageErrors[seatNo] && <p>age should be above 5</p>
-                )}
+                {seatDetail.age === ""
+                  ? ""
+                  : ageErrors[seatNo] && <p>age should be above 5</p>}
               </div>
             </div>
 
@@ -450,11 +467,9 @@ export default function SeatSelection({ bus, callback }) {
                 </select>
               )}
               <div className={classes.error}>
-                {seatDetail.gender === "" ? (
-                  <p>*required</p>
-                ) : (
-                  genderErrors[seatNo] && <p>mandatory</p>
-                )}
+                {seatDetail.gender === ""
+                  ? ""
+                  : genderErrors[seatNo] && <p>mandatory</p>}
               </div>
             </div>
           </div>
@@ -465,7 +480,7 @@ export default function SeatSelection({ bus, callback }) {
 
   const handleInputChange = (seatNo, field, value) => {
     if (field === "name") {
-      if (value && value.length > 3 && !!/^[a-zA-Z ]+$/.test(value)) {
+      if (value && value.length >= 3 && !!/^[a-zA-Z ]+$/.test(value)) {
         // console.log("name satisfying the above criteria");
         setNameErrors((prevNameErrors) => ({
           ...prevNameErrors,
@@ -512,10 +527,14 @@ export default function SeatSelection({ bus, callback }) {
     );
     setSeatDetails(updatedDetails);
   };
-
+  function popfun() {
+    setPopup(false);
+  }
   // ==========================================================================================================================================
   return (
     <div className={classes.busout}>
+      {!props.busNo && <Seatsloader />}
+      {popup && <Popup props={msg} callbackfun={popfun} />}
       <div className={classes.seatselectioncontainer}>
         <h2>Bus-{props?.busNo}</h2> {/* Use optional chaining here */}
         <div className={classes.split}>

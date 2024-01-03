@@ -60,27 +60,36 @@
 }
 .legend h3 {
   margin-top: 4px;
+  color: #14a002;
+  padding: 1px;
+  font-style: bold;
+  font-size: 20px;
 }
+.legend h5 {
+  color: #14a002;
+}
+
 .notbooked {
   height: 20px;
   width: 20px;
   background-color: #ffffff;
 
-  border: 1px solid black;
+  border: 1px solid #14a002;
 }
 .boooked {
   height: 20px;
   width: 20px;
   background-color: #18191b71;
   margin-left: 0px;
-  border: 1px solid black;
+  border: 1px solid #14a002;
+  color: #14a002;
 }
 .bookedfemale {
   height: 20px;
   width: 40px;
   background-color: #ec79d5;
   margin-left: 0px;
-  border: 1px solid black;
+  border: 1px solid #14a002;
 }
 .reserved {
   height: 17px;
@@ -93,7 +102,7 @@
 .head {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
+  border: 1px solid rgb(255, 145, 0);
   border-radius: 10px;
   /* background-color: #72fe70; */
   margin-right: 10px;
@@ -106,6 +115,8 @@
 }
 .head1 h3 {
   width: 166px;
+  color: rgb(255, 145, 0);
+  /* border: 1px solid black; */
   /* border: 1px solid black; */
 }
 .split {
@@ -164,7 +175,8 @@
   background-color: #c8ece9;
   border: 1px solid black;
   padding: 2px; /* Add padding for better spacing */
-  border-radius: 8px; /* Add border-radius for rounded corners */
+  border-radius: 8px;
+  color: hwb(293 5% 82% / 0.822); /* Add border-radius for rounded corners */
 }
 
 .seatgrid {
@@ -218,6 +230,16 @@
   border-radius: 5px; /* Add border-radius for rounded corners */
   cursor: pointer;
 }
+.selectedseats button:hover {
+  padding-left: 12px;
+  padding-right: 12px;
+  background-color: #133ce2; /* Change button background color */
+  color: white; /* Change button text color */
+  border: none;
+  border-radius: 5px; /* Add border-radius for rounded corners */
+  cursor: pointer;
+  box-shadow: 0px 0px 5px 3px blue;
+}
 .busout {
   /* border: 1px solid black; */
   display: flex;
@@ -261,7 +283,7 @@
   top: 150%;
   left: 100%;
   transform: translate(-50%, -50%);
-  color: rgb(0, 0, 0); /* Adjust the color as needed */
+  color: rgb(0, 119, 255); /* Adjust the color as needed */
   font-size: 16px; /* Adjust the font size as needed */
 }
 .seatImageContainerseat {
@@ -275,7 +297,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: rgb(0, 0, 0); /* Adjust the color as needed */
+  color: rgb(0, 119, 255); /* Adjust the color as needed */
   font-size: 13px; /* Adjust the font size as needed */
 }
 
