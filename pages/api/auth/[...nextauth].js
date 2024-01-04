@@ -16,6 +16,7 @@ async function connectToDB() {
 }
 
 const authOptions = {
+  secret: "111112222222222111111122212222211111111111",
   session: {
     strategy: "jwt",
   },
