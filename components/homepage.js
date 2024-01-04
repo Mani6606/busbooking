@@ -31,25 +31,25 @@ const BusList = () => {
   const [success, setSuccess] = useState(false);
   const router = useRouter();
   // ==================use effect for  checking session===================================================================
-  // useEffect(() => {
-  //   getSession().then((session) => {
-  //     if (!session) {
-  //       router.replace("/");
-  //     } else {
-  //       console.log(session.user.email);
-  //       console.log(session);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    getSession().then((session) => {
+      if (!session) {
+        router.replace("/");
+      } else {
+        console.log(session.user.email);
+        console.log(session);
+      }
+    });
+  }, []);
   // =============================================================================================================================
   // ==================use effect for timeout  session===================================================================
-  // useEffect(() => {
-  //   const logoutAfterTime = setTimeout(async () => {
-  //     await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
-  //   }, 10 * 60 * 1000); // 30 minutes in milliseconds
+  useEffect(() => {
+    const logoutAfterTime = setTimeout(async () => {
+      await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
+    }, 10 * 60 * 1000); // 30 minutes in milliseconds
 
-  //   return () => clearTimeout(logoutAfterTime); // Clear the timeout on component unmount
-  // }, []);
+    return () => clearTimeout(logoutAfterTime); // Clear the timeout on component unmount
+  }, []);
   // =============================================================================================================================
   // ==================use effect for fetch data===================================================================
   useEffect(() => {
