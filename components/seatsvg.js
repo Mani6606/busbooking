@@ -36,7 +36,7 @@ const SSeatIcon = () => {
         y1="0"
         x2="20"
         y2="0"
-        style={{ stroke: "green", strokeWidth: 2 }}
+        style={{ stroke: "green", strokeWidth: 1 }}
       />
 
       <line

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Success from "./loaders/success";
 import {
   Container,
   Box,
@@ -27,6 +28,7 @@ import {
 const BusList = () => {
   const [busList, setBusList] = useState([]);
   const [selectedBus, setSelectedBus] = useState(null);
+  const [success, setSuccess] = useState(false);
   const router = useRouter();
   // ==================use effect for  checking session===================================================================
   useEffect(() => {
@@ -113,10 +115,18 @@ const BusList = () => {
         console.error("API Error:", error);
       });
   };
+  const successtoast = () => {
+    setSuccess(true);
+    setTimeout(() => {
+      setSuccess(false);
+    }, 2500);
+  };
 
   const handleCloseDialog = () => {
     setSelectedBus(null);
+    // successtoast();
   };
+
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
   };
@@ -192,10 +202,15 @@ const BusList = () => {
           maxWidth="lg" // You can adjust this value as needed
         >
           {selectedBus && (
-            <SeatSelection bus={selectedBus} callback={handleCloseDialog} />
+            <SeatSelection
+              bus={selectedBus}
+              callback={handleCloseDialog}
+              callback1={successtoast}
+            />
           )}
         </Dialog>
       </Container>
+      {success && <Success />}
     </>
   );
 };

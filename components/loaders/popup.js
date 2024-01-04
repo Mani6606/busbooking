@@ -7,6 +7,10 @@ export default function Popup({ props, callbackfun }) {
   const handleclick = () => {
     callbackfun();
   };
+  setTimeout(() => {
+    callbackfun();
+  }, 1000);
+
   return (
     <div className={classes.card}>
       <div className={classes.content}>

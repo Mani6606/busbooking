@@ -201,7 +201,7 @@
 .seat.selected {
   background-color: #72fe70;
   color: white;
-  border: 1px solid #45a049;
+  border: 1px solid #45a04997;
 }
 .seat.booked {
   background-color: #18191b71;

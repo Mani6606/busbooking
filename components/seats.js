@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import Popup from "./loaders/popup";
 
 import Seatsloader from "./loaders/seatsloader";
-export default function SeatSelection({ bus, callback }) {
+export default function SeatSelection({ bus,callback,callback1 }) {
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seatDetails, setSeatDetails] = useState([]);
@@ -317,6 +317,7 @@ export default function SeatSelection({ bus, callback }) {
         setSelectedSeats([]);
         setSeatDetails([]);
         callback();
+        callback1();
         // closeConfirmationDialog();
       } else {
         console.log("Booking failed");

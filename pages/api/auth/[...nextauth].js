@@ -19,7 +19,6 @@ async function connectToDB() {
 }
 
 const authOptions = {
-  secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
   },
