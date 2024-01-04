@@ -1,5 +1,4 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-// import { connectToDB } from "../../util/mongodb";
 import NextAuth from "next-auth";
 import { MongoClient } from "mongodb";
 const uri =
