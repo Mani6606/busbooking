@@ -63,7 +63,7 @@ export default function Login() {
         Password: password,
       });
 
-      if (response.ok) {
+      if (!response.error) {
         console.log("success");
         console.log(response);
         router.replace("/home");
