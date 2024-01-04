@@ -1,8 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth from "next-auth";
 import { MongoClient } from "mongodb";
-const uri =
-  "mongodb+srv://user1:user123@cluster0.6gjnvof.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI;
 let cachedClient = null;
 
 async function connectToDB() {
