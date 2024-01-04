@@ -56,6 +56,7 @@ export default function Login() {
     } else {
       setLoading(true);
       setUserpassword("");
+      console.log({ email, password });
       const response = await signIn("credentials", {
         redirect: false,
         Email: email,
@@ -67,7 +68,7 @@ export default function Login() {
         console.log(response);
         router.replace("/home");
       } else {
-        console.log(response);
+        console.log(response.error);
         console.log("failed");
         setUserpassword("Invalid Username or password");
         setTimeout(setDetails, 400);

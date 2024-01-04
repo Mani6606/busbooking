@@ -3,7 +3,6 @@ import NextAuth from "next-auth";
 import { MongoClient } from "mongodb";
 const uri =
   "mongodb+srv://user1:user123@cluster0.6gjnvof.mongodb.net/?retryWrites=true&w=majority";
-const dbName = "my-site";
 let cachedClient = null;
 
 async function connectToDB() {
@@ -24,25 +23,22 @@ const authOptions = {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        // const cl = await connectToDB();
-        // const client = await cl.connect();
-        // const db = client.db("my-site");
-        // const userCollection = db.collection("userInfo");
-        // const user = await userCollection.findOne({ Email: credentials.Email });
-        // console.log("credentaials", user);
-        // if (!user) {
-        //   throw new Error("User not found");
-        // }
-        // console.log("passwordcheck ", credentials.Password, user.Password);
+        const cl = await connectToDB();
+        const client = await cl.connect();
+        const db = await client.db("my-site");
+        const userCollection = await db.collection("userInfo");
+        const user = await userCollection.findOne({ Email: credentials.Email });
+        console.log("credentaials", user);
+        if (!user) {
+          throw new Error("User not found");
+        }
+        console.log("passwordcheck ", credentials.Password, user.Password);
         // if (!(credentials.Password === user.Password)) {
         //   throw new Error("Invalid password please enter correct password");
         //   return;
         // }
-        // client.close();
-        // return { email: credentials.Email };
-        if (credentials.Email == "zidp@gmail.com") {
-          return { email: credentials.Email };
-        }
+        client.close();
+        return { email: credentials.Email };
       },
     }),
   ],
