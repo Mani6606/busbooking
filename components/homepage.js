@@ -6,6 +6,7 @@ import { signOut } from "next-auth/react";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Success from "./loaders/success";
+
 import {
   Container,
   Box,
@@ -133,15 +134,39 @@ const BusList = () => {
 
   return (
     <>
+      <div className={classes.image}>
+        <Image
+          src="/busbackground.png" // Replace with the actual path to your image
+          alt="Background Image"
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
       <div className={classes.header}>
-        <Image width={150} height={80} src="/logo.jpg"></Image>
+        <Image
+          width={150}
+          height={80}
+          src="/logo.jpg"
+          style={{
+            borderRadius: "50%",
+            marginRight: "10px",
+          }}
+        ></Image>
 
         <h2>welcome for online ticket reservation system</h2>
         <Button
-          variant="contained"
-          size="medium"
-          style={{
+          sx={{
             backgroundColor: "red",
+            opacity: "0.7",
+            color: "white",
+            padding: "8px",
+            marginLeft: "10px",
+            ":hover": {
+              opacity: "1",
+              color: "balck",
+              backgroundColor: "red",
+              border: "2px solid black",
+            },
           }}
           onClick={handleLogout}
         >
@@ -185,7 +210,15 @@ const BusList = () => {
                   variant="outlined"
                   color="primary"
                   onClick={() => handleViewSeats(bus._id)}
-                  sx={{ color: "blue", fontWeight: "bold" }}
+                  sx={{
+                    color: "orange",
+                    fontWeight: "bold",
+                    ":hover": {
+                      opacity: "1",
+                      borderRadius: "10px",
+                      border: "2px solid blue",
+                    },
+                  }}
                 >
                   View Seats
                 </Button>
