@@ -136,7 +136,7 @@ const BusList = () => {
     <>
       <div className={classes.image}>
         <Image
-          src="/busbackground.png" // Replace with the actual path to your image
+          src="/blur.png" // Replace with the actual path to your image
           alt="Background Image"
           layout="fill"
           objectFit="cover"
@@ -156,16 +156,19 @@ const BusList = () => {
         <h2>welcome for online ticket reservation system</h2>
         <Button
           sx={{
+            fontFamily: "bold",
             backgroundColor: "red",
-            opacity: "0.7",
+            opacity: "1",
             color: "white",
             padding: "8px",
             marginLeft: "10px",
             ":hover": {
               opacity: "1",
-              color: "balck",
+              fontSize: "15px",
+
+              color: "black",
               backgroundColor: "red",
-              border: "2px solid black",
+              // border: "2px solid black",
             },
           }}
           onClick={handleLogout}
@@ -212,10 +215,11 @@ const BusList = () => {
                   onClick={() => handleViewSeats(bus._id)}
                   sx={{
                     color: "orange",
+                    borderRadius: "5px",
                     fontWeight: "bold",
                     ":hover": {
                       opacity: "1",
-                      borderRadius: "10px",
+                      borderRadius: "20px",
                       border: "2px solid blue",
                     },
                   }}

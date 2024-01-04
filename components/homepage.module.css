@@ -16,9 +16,10 @@
 }
 
 .header h2 {
-  backdrop-filter: blur(3px);
+  /* backdrop-filter: blur(3px); */
   /* background-color: rgb(247, 164, 87); */
-  border-radius: 15px;
+  /* text-decoration: underline; */
+  text-shadow: 5px 1px 3px rgb(0, 0, 0);
   font-size: 38px;
   color: #f2f2f2; /* A mix of red and rose colors */
   /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); Shadow effect */
@@ -40,26 +41,26 @@
   justify-content: center;
   flex-direction: row;
   /* border: 1px solid rgb(0, 0, 0); */
-  padding: 20px;
+  padding: 5px;
   width: 100%;
   margin: 20px;
   /* margin-right: 100px; */
   border-radius: 80px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.764);
-  backdrop-filter: blur(20px);
-  background-color: rgba(207, 124, 124, 0);
+  /* backdrop-filter: blur(20px); */
+  background-color: rgba(0, 0, 0, 0.429);
 }
 .heading {
   font-weight: bold;
   font-size: 23px;
   margin-right: 5px;
-  color: white;
+  color: rgb(47, 180, 54);
 }
 
 .value {
   font-weight: medium;
   font-size: 14px;
   margin-right: 20px;
-  color: white;
+  color: rgb(25, 190, 255);
 }
