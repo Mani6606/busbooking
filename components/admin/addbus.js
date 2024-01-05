@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Popup from "../loaders/popup";
 import {
   TextField,
   Button,
@@ -10,6 +11,11 @@ import {
 import { useRouter } from "next/router";
 import classes from "./addbus.module.css";
 export default function Addbus({ onBackButtonClick }) {
+  const [popup, setPopup] = useState(false);
+  const [msg, setMsg] = useState("");
+  function callback() {
+    setPopup(false);
+  }
   const router = useRouter();
   const [formData, setFormData] = useState({
     busNo: "",
@@ -85,30 +91,56 @@ export default function Addbus({ onBackButtonClick }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    fetch("/api/buslist", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ formData }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("API Response:", data);
-        setFormData({
-          busNo: "",
-          from: "",
-          to: "",
-          departureTime: "",
-          arrivalTime: "",
-          busModel: "",
-          seats: [],
-        });
+    if (
+      formData.busNo &&
+      formData.arrivalTime &&
+      formData.departureTime &&
+      formData.from &&
+      formData.to &&
+      formData.busModel
+    ) {
+      fetch("/api/buslist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ formData }),
       })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message === "Bus number already exists") {
+            setPopup(true);
+            setMsg("Bus number already exists");
+          }
+          if (data.message === "Message stored successfully") {
+            setPopup(true);
+            setMsg("Bus Added successfully");
+          }
+          if (data.message === "Internal server error") {
+            setPopup(true);
+            setMsg("Internal server error");
+          }
 
-      .catch((error) => {
-        console.error("API Error:", error);
-      });
+          console.log("API Response:", data.message);
+
+          setFormData({
+            busNo: "",
+            from: "",
+            to: "",
+            departureTime: "",
+            arrivalTime: "",
+            busModel: "",
+            seats: [],
+          });
+        })
+
+        .catch((error) => {
+          console.error("API Error:", error);
+        });
+    } else {
+      setPopup(true);
+      setMsg("Fill the required details");
+    }
   };
 
   return (
@@ -125,6 +157,7 @@ export default function Addbus({ onBackButtonClick }) {
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
       }}
     >
+      {popup && <Popup props={msg} callbackfun={callback} />}
       <button className={classes.close} onClick={onBackButtonClick}>
         <svg viewBox="0 0 10 10">
           <polygon points="10.2,0.7 9.5,0 5.1,4.4 0.7,0 0,0.7 4.4,5.1 0,9.5 0.7,10.2 5.1,5.8 9.5,10.2 10.2,9.5 5.8,5.1"></polygon>

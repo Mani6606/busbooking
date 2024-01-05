@@ -10,9 +10,10 @@
   gap: 20px;
   padding: 30px;
   position: absolute;
-  top: 10%;
+  top: 30%;
   left: 35%;
-  box-shadow: 0 0 10px 1000px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 100px 1000px rgba(0, 0, 0, 0.765);
+  z-index: 1000;
 }
 
 .content {
