@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import classes from "./buslist.module.css";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Seatsloader from "../loaders/seatsloader";
 import {
   Container,
   Box,
@@ -24,9 +26,11 @@ import NavigationBar from "./navigationbar";
 
 const BusList = ({ onBackButtonClick }) => {
   const [busList, setBusList] = useState([]);
+  const [loader, setLoader] = useState(false);
   const [selectedBus, setSelectedBus] = useState(null);
 
   useEffect(() => {
+    setLoader(true);
     // Fetch bus list data from your API
     fetch("/api/buslist") // Update with your actual API endpoint
       .then((response) => response.json())
@@ -36,6 +40,9 @@ const BusList = ({ onBackButtonClick }) => {
       .catch((error) => {
         console.error("API Error:", error);
       });
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
   }, []);
 
   const handleViewSeats = (_id) => {
@@ -46,6 +53,7 @@ const BusList = ({ onBackButtonClick }) => {
   };
 
   const handleDeleteBus = (_id) => {
+    setLoader(true);
     // Send DELETE request to delete the bus by _id
     fetch(`/api/buslist`, {
       method: "DELETE",
@@ -64,6 +72,9 @@ const BusList = ({ onBackButtonClick }) => {
       .catch((error) => {
         console.error("API Error:", error);
       });
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
   };
 
   const handleDeleteSeat = (busNo, seatNo) => {
@@ -116,7 +127,22 @@ const BusList = ({ onBackButtonClick }) => {
 
   return (
     <Container>
-      <NavigationBar title="Bus List" onBackButtonClick={onBackButtonClick} />
+      {loader && <Seatsloader />}
+      {/* <NavigationBar title="Bus List" onBackButtonClick={onBackButtonClick} /> */}
+      {/* <Button
+        color="inherit" // Set the color to "inherit" for white
+        size="MEDIUM" // Set the size as needed (small, medium, large)
+        startIcon={<ArrowBackIcon />} // Use the ArrowBackIcon as a start icon
+        onClick={onBackButtonClick}
+        sx={{ fontWeight: "bold" }} // Set font weight to bold
+      >
+        Back
+      </Button> */}
+      <button className={classes.close} onClick={onBackButtonClick}>
+        <svg viewBox="0 0 10 10">
+          <polygon points="10.2,0.7 9.5,0 5.1,4.4 0.7,0 0,0.7 4.4,5.1 0,9.5 0.7,10.2 5.1,5.8 9.5,10.2 10.2,9.5 5.8,5.1"></polygon>
+        </svg>
+      </button>
       <Box
         sx={{
           display: "flex",

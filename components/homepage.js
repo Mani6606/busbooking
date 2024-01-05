@@ -189,7 +189,7 @@ const BusList = () => {
             // Allow items to wrap to the next row
           }}
         >
-          <List>
+          <List sx={{ marginTop: "100px" }}>
             {busList.map((bus) => (
               <div className={classes.listfull}>
                 <div className={classes.list}>

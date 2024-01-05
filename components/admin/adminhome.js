@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -8,10 +7,12 @@ import Buslist from "./buslist"; // Import the BusList component
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
+import classes from "./adminhome.module.css";
 export default function AdminHome() {
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
   };
+  const [addbus, setAddbus] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
@@ -27,12 +28,6 @@ export default function AdminHome() {
       if (!session || session.user.email !== "admin@gmail.com") {
         router.replace("/");
       } else {
-        // temp_id = session.user.email;
-        // setInput_id(session.user.email);
-        // const emaill = session.user.email;
-        // const atIndex = emaill.indexOf("@");
-        // setName(session.user.email.substring(0, atIndex));
-        // Getmsg(session.user.email);
         console.log(session.user.email);
         console.log(session);
       }
@@ -57,59 +52,67 @@ export default function AdminHome() {
   };
 
   return (
-    <>
-      <Button
-        variant="contained"
-        size="medium"
-        style={{
-          position: "fixed",
-          top: "10px",
-          right: "10px",
-          margin: "10px",
-          backgroundColor: "red",
-        }}
-        onClick={handleLogout}
-      >
-        LogOut
-      </Button>
+    <div className={classes.body}>
+      <div className={classes.header}>
+        <h3>welcome To the Admin Page</h3>
+        <Button
+          variant="contained"
+          size="small"
+          style={{
+            position: "absolute",
+            top: "18px",
+            right: "10px",
+            margin: "5px",
+            backgroundColor: " rgb(249, 120, 0)",
+          }}
+          onClick={handleLogout}
+        >
+          LogOut
+        </Button>
+      </div>
       <Container>
         <Box
+          fullWidth
           sx={{
             display: "flex",
-            flexDirection: "column",
+            flexWrap: "column wrap",
+            flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            height: "100vh",
+            height: "90vh",
+            backgroundColor: "white",
+            gap: "20px",
+            // Conditionally apply styles based on showAddBus state
           }}
         >
-          {showAddBus ? (
-            <Addbus onBackButtonClick={handleBackButtonClick} />
-          ) : showBusList ? (
-            <Buslist onBackButtonClick={handleBackButtonClick} />
-          ) : (
-            <>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                style={{ margin: "10px" }}
-                onClick={handleAddBusClick}
-              >
-                Add Bus
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                style={{ margin: "10px" }}
-                onClick={handleBusListClick}
-              >
-                Bus List
-              </Button>
-            </>
-          )}
+          <div className={classes.buttonstwo}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              style={{ margin: "10px" }}
+              onClick={handleAddBusClick}
+            >
+              Add Bus
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="large"
+              style={{ margin: "10px" }}
+              onClick={handleBusListClick}
+            >
+              Bus List
+            </Button>
+          </div>
+          <div className={(showAddBus || showBusList) && classes.secondpart}>
+            {showAddBus && <Addbus onBackButtonClick={handleBackButtonClick} />}
+            {showBusList && (
+              <Buslist onBackButtonClick={handleBackButtonClick} />
+            )}
+          </div>
         </Box>
       </Container>
-    </>
+    </div>
   );
 }

@@ -19,3 +19,37 @@
   font-size: 14px;
   margin-right: 20px;
 }
+/* ==================================================================================================================== */
+/* ================================================================================================================================= */
+
+.close {
+  width: 30px;
+  height: 30px;
+  background-color: rgb(255, 255, 255);
+
+  position: relative;
+  left: 98%;
+  padding: 0px;
+  margin: 5px;
+  text-align: center;
+  outline: 0;
+  border: none;
+}
+
+.close svg polygon {
+  fill: #000000;
+  border: none;
+  outline: 0;
+}
+
+.close svg {
+  width: 15px;
+  height: 15px;
+  border: none;
+  outline: 0;
+}
+
+.close:hover {
+  background-color: #ffa4a4;
+  border-radius: 10px;
+}

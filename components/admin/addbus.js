@@ -8,6 +8,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import classes from "./addbus.module.css";
 export default function Addbus({ onBackButtonClick }) {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -109,23 +110,26 @@ export default function Addbus({ onBackButtonClick }) {
         console.error("API Error:", error);
       });
   };
-  const handleBackButtonClick = () => {
-    // Invoke the callback function passed from the parent component (AdminHome)
-    onBackButtonClick();
-  };
 
   return (
     <form
       onSubmit={handleSubmit}
       style={{
-        maxWidth: "400px",
-        margin: "50px auto",
-        padding: "20px",
-        border: "1px solid #ccc",
+        maxWidth: "800px",
+        margin: "0px",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+        paddingBottom: "20px",
+        // border: "1px solid #ccc",
         borderRadius: "8px",
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
       }}
     >
+      <button className={classes.close} onClick={onBackButtonClick}>
+        <svg viewBox="0 0 10 10">
+          <polygon points="10.2,0.7 9.5,0 5.1,4.4 0.7,0 0,0.7 4.4,5.1 0,9.5 0.7,10.2 5.1,5.8 9.5,10.2 10.2,9.5 5.8,5.1"></polygon>
+        </svg>
+      </button>
       <TextField
         label="Bus No"
         type="text"
@@ -134,7 +138,6 @@ export default function Addbus({ onBackButtonClick }) {
         onChange={handleChange}
         fullWidth
         required
-        margin="normal"
       />
       <TextField
         label="From"
@@ -211,19 +214,9 @@ export default function Addbus({ onBackButtonClick }) {
         variant="contained"
         color="primary"
         fullWidth
-        style={{ marginTop: "16px" }}
+        style={{ marginTop: "10px" }}
       >
         Submit
-      </Button>
-      <Button
-        type="button"
-        variant="outlined"
-        color="primary"
-        fullWidth
-        style={{ marginTop: "16px" }}
-        onClick={handleBackButtonClick}
-      >
-        Back
       </Button>
     </form>
   );

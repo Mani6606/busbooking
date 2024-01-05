@@ -30,6 +30,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  /* margin-top: 100px; */
 }
 .listfull:hover {
   border: 2px solid white;
@@ -43,6 +44,7 @@
   /* border: 1px solid rgb(0, 0, 0); */
   padding: 5px;
   width: 100%;
+  /* margin-top: 100px; */
   margin: 20px;
   /* margin-right: 100px; */
   border-radius: 80px;
