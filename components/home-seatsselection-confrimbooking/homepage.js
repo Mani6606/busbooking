@@ -5,7 +5,7 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Success from "./loaders/success";
+import Success from "../loaders/success";
 
 import {
   Container,

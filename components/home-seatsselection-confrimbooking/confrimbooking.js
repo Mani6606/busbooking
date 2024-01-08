@@ -9,7 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import { useState } from "react";
-import Loader from "./loaders/bookingloader";
+import Loader from "../loaders/bookingloader";
 import classes from "./confrimbooking.module.css";
 export default function Confirm({
   props,

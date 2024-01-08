@@ -4,79 +4,19 @@
   /* filter: blur(10px); */
 }
 .error {
-  color: #ff0000; /* Red text color for error messages */
-  font-size: 14px; /* Font size for error messages */
-  margin-top: 5px; /* Spacing between the input field and error message */
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 5px;
 }
-/* .header{
-  background-color: #0056b3;
-  border-radius: 3px solid black;
-} */
 .header h1 {
   position: absolute;
   top: 0%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #fff; /* Set the color of the text */
-  font-size: 3rem; /* Adjust the font size as needed */
-  z-index: 2; /* Set a higher z-index than the background image */
-}
-
-/* .switch{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-border:2px solid black;
-width:10%;
-margin-left:44%;
-border-radius:10px;
-margin-top:8px;
-}
-.switch button{
-  padding:5px;
- margin:4px;
- border-radius:10px;
- border: none;
-
-} */
-.switch {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid black;
-  width: 10%;
-  margin-left: 44%;
-  border-radius: 10px;
-  margin-top: 8px;
-}
-
-.switch button {
-  padding: 8px 12px; /* Adjust padding for better appearance */
-  margin: 4px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer; /* Add cursor pointer for better user experience */
-  transition: background-color 0.3s ease, color 0.3s ease; /* Add transition for smooth color change */
-}
-
-.switch button:first-child {
-  background-color: #3498db; /* Initial background color for the 'Login' button */
-  color: #fff; /* Initial text color for better visibility */
-}
-
-.switch button:last-child {
-  background-color: #fff; /* Initial background color for the 'Signup' button */
-  color: #333; /* Initial text color for better visibility */
-}
-
-.switch button:first-child:active {
-  background-color: #2980b9; /* Change background color on 'Login' button click */
-}
-
-.switch button:last-child:active {
-  background-color: #fff; /* No change in background color on 'Signup' button click */
-  color: #333; /* No change in text color on 'Signup' button click */
+  color: #fff;
+  font-size: 3rem;
+  z-index: 2;
 }
 
 /* Container styles */
@@ -92,14 +32,13 @@ margin-top:8px;
   border-radius: 30px;
   width: 30%;
   padding-bottom: 20px;
-  backdrop-filter: blur(7px); /* Adjust the blur amount as needed */
+  backdrop-filter: blur(7px);
   background-color: rgba(0, 0, 0, 0.165);
 }
 
 .signupform {
-  /* background-color: #fff; */
   padding: 2%;
-  /* filter: blur(1px); */
+
   border-radius: 6%;
   width: 55%;
   display: flex;
@@ -113,7 +52,6 @@ margin-top:8px;
   text-align: center;
 }
 
-/* Label styles */
 .signupform label {
   display: block;
   margin-bottom: 10px;
@@ -122,17 +60,14 @@ margin-top:8px;
   padding-bottom: 4%;
   font-size: 20px;
   color: rgb(40, 11, 11);
-  /* border: 2px solid black; */
-  /* opacity: 0.5; */
 }
 
-/* Input styles */
 .signupform input {
   padding: 10px;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   margin-bottom: 5%;
-  background-color: rgba(245, 245, 245, 0);
-  font-size: 15px;
+  background-color: rgba(0, 0, 0, 0.003);
+  font-size: 17px;
   width: 90%;
   border: none;
   outline: none;

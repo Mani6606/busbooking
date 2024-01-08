@@ -124,7 +124,7 @@ export default function SignUp({ props }) {
   }
 
   useEffect(() => {
-    // Wrap the code in a "DOMContentLoaded" event listener
+   
     document.addEventListener("DOMContentLoaded", function () {
       const signupForm = document.querySelector(".signupform");
       if (signupForm) {

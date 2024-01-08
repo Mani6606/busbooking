@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { Dialog } from "@mui/material";
 import classes from "./seats.module.css";
-import SeatIcon from "./svg";
-import SSeatIcon from "./seatsvg";
+import SeatIcon from "../svg/svg";
+import SSeatIcon from "../svg/seatsvg";
 import Confirm from "./confrimbooking";
 import { useRouter } from "next/router";
-import Popup from "./loaders/popup";
+import Popup from "../loaders/popup";
+import SeatsSelection from "./seatsselection";
 
-import Seatsloader from "./loaders/seatsloader";
-export default function SeatSelection({ bus,callback,callback1 }) {
+import Seatsloader from "../loaders/seatsloader";
+export default function SeatSelection({ bus, callback, callback1 }) {
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seatDetails, setSeatDetails] = useState([]);
@@ -86,13 +87,10 @@ export default function SeatSelection({ bus,callback,callback1 }) {
         );
 
         if (existingDetailIndex !== -1) {
-          // If details exist, remove the existing detail
           const updatedSeatDetails = [...prevSeatDetails];
           updatedSeatDetails.splice(existingDetailIndex, 1);
           return updatedSeatDetails;
         }
-
-        // Add a new empty object for the selected seat
         return [...prevSeatDetails, { seatNo, name: "", age: "", gender: "" }];
       });
 
@@ -106,7 +104,6 @@ export default function SeatSelection({ bus,callback,callback1 }) {
         [seatNo]: false,
       }));
     } else {
-      // alert("Maximum seats r?eached");
       setMsg("Maximum seats reached");
 
       setPopup(true);
@@ -135,8 +132,6 @@ export default function SeatSelection({ bus,callback,callback1 }) {
           />
           <span className={classes.seatNumber}>{seat.seatNo}</span>
         </div>
-
-        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
       </div>
     ));
     // =====================================2==================================================================================================
@@ -176,7 +171,6 @@ export default function SeatSelection({ bus,callback,callback1 }) {
           `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
-        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
         <div className={classes.seatImageContainerseat}>
           <SSeatIcon
             selected={selectedSeats.includes(seat.seatNo)}
@@ -206,8 +200,6 @@ export default function SeatSelection({ bus,callback,callback1 }) {
           />
           <span className={classes.seatNumber}>{seat.seatNo}</span>
         </div>
-        {/* <Image src='/seat.png' height={20} width={20} alt={`Seat ${seat.seatNo}`} /> */}
-        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
       </div>
     ));
     // ===================================================5==================================================================================
@@ -223,7 +215,6 @@ export default function SeatSelection({ bus,callback,callback1 }) {
       `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
-        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
         <div className={classes.seatImageContainer}>
           <SeatIcon
             selected={selectedSeats.includes(seat.seatNo)}
@@ -282,9 +273,6 @@ export default function SeatSelection({ bus,callback,callback1 }) {
     if (props?.busno) {
       renderSeats();
     }
-    // setTimeout(() => {
-    //   renderSeats();
-    // }, 2000);
   }, [props]);
   // ================================SEAT LAYOUT END ==========================================================================================
   const openConfirmationDialog = () => {
@@ -313,12 +301,10 @@ export default function SeatSelection({ bus,callback,callback1 }) {
       if (response.ok) {
         console.log("Booking successful");
 
-        // Clear selected seats after booking
         setSelectedSeats([]);
         setSeatDetails([]);
         callback();
         callback1();
-        // closeConfirmationDialog();
       } else {
         console.log("Booking failed");
       }
@@ -332,12 +318,11 @@ export default function SeatSelection({ bus,callback,callback1 }) {
     const selectedSeatsLength =
       Object.values(selectedSeats).filter(Boolean).length;
     if (selectedSeatsLength === 0) {
-      // alert("no seats selected");
       setMsg("No seats selected");
       setPopup(true);
       return;
     }
-    // Validate seat details
+
     const isSeatDetailsValid = seatDetails.every((detail) => {
       const isValidName =
         detail.name &&

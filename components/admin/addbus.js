@@ -152,7 +152,7 @@ export default function Addbus({ onBackButtonClick }) {
         paddingLeft: "20px",
         paddingRight: "20px",
         paddingBottom: "20px",
-        // border: "1px solid #ccc",
+
         borderRadius: "8px",
         boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
       }}
@@ -192,7 +192,7 @@ export default function Addbus({ onBackButtonClick }) {
         required
         margin="normal"
       />
-      {/* Departure Time */}
+
       <TextField
         label="Departure Timing"
         type="time"
@@ -206,11 +206,10 @@ export default function Addbus({ onBackButtonClick }) {
           shrink: true,
         }}
         inputProps={{
-          step: 300, // 5 minutes step
+          step: 300,
         }}
       />
 
-      {/* Arrival Time */}
       <TextField
         label="Arrival Timing"
         type="time"
@@ -224,7 +223,7 @@ export default function Addbus({ onBackButtonClick }) {
           shrink: true,
         }}
         inputProps={{
-          step: 300, // 5 minutes step
+          step: 300,
         }}
       />
       <FormControl fullWidth margin="normal">

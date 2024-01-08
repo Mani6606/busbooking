@@ -1,5 +1,4 @@
-import Homepage from '../components/homepage'
-export default function Home(){
-    return(<Homepage />);
-
+import Homepage from "../components/home-seatsselection-confrimbooking/homepage";
+export default function Home() {
+  return <Homepage />;
 }
