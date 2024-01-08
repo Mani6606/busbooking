@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       const busDetails = await collection.findOne({ _id: objectId });
 
       if (!busDetails) {
-        res.status(404).json({ error: "Bus not found" });
+        res.status(404).json({ error: "Bus not found in the database" });
       } else {
         res.status(200).json(busDetails);
       }
