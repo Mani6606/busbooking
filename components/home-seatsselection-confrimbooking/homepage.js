@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SeatSelection from "./seats";
+
 import classes from "./homepage.module.css";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
@@ -36,9 +37,6 @@ const BusList = () => {
     getSession().then((session) => {
       if (!session) {
         router.replace("/");
-      } else {
-        console.log(session.user.email);
-        console.log(session);
       }
     });
   }, []);
@@ -46,10 +44,10 @@ const BusList = () => {
   // ==================use effect for timeout  session===================================================================
   useEffect(() => {
     const logoutAfterTime = setTimeout(async () => {
-      await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
-    }, 10 * 60 * 1000); // 30 minutes in milliseconds
+      await signOut({ callbackUrl: "/" });
+    }, 30 * 60 * 1000);
 
-    return () => clearTimeout(logoutAfterTime); // Clear the timeout on component unmount
+    return () => clearTimeout(logoutAfterTime);
   }, []);
   // =============================================================================================================================
   // ==================use effect for fetch data===================================================================
@@ -59,7 +57,6 @@ const BusList = () => {
       .then((response) => response.json())
       .then((data) => {
         setBusList(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error("API Error:", error);
@@ -69,7 +66,7 @@ const BusList = () => {
   const handleViewSeats = (_id) => {
     // Find the selected bus by _id
     const selected = busList.find((bus) => bus._id === _id);
-    console.log("seleccted", selected.formData.seats);
+
     setSelectedBus(selected);
   };
 
@@ -191,7 +188,7 @@ const BusList = () => {
         >
           <List sx={{ marginTop: "100px" }}>
             {busList.map((bus) => (
-              <div className={classes.listfull}>
+              <div key={bus.busNo} className={classes.listfull}>
                 <div className={classes.list}>
                   <div className={classes.heading}>Bus No: </div>
                   <div className={classes.value}>{bus.formData.busNo}</div>
@@ -221,6 +218,7 @@ const BusList = () => {
                       opacity: "1",
                       borderRadius: "20px",
                       border: "2px solid blue",
+                      // transition: "border 0.2s ease,borderRadius 0.2s ease",
                     },
                   }}
                 >
@@ -247,7 +245,7 @@ const BusList = () => {
           )}
         </Dialog>
       </Container>
-      {success && <Success />}
+      {success && <Success props="Booking Successfull" />}
     </>
   );
 };

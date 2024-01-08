@@ -9,7 +9,7 @@ const dbName = "my-site";
 async function ConnectToDatabase() {
   // if (cachedClient) {
   //   return cachedClient;
-  //   console.log("cached client");
+
   // } else {
   const client = new MongoClient(uri);
   await client.connect();
@@ -23,21 +23,17 @@ export default async function handler(req, res) {
       let reserv = 0;
 
       const { busNo, seatNo } = req.body;
-      console.log("bbb", busNo, seatNo);
+
       if (seatNo >= 6 && seatNo <= 15) {
-        console.log("selected seats is between 5 and 15");
         reserv += 10;
       }
       if (seatNo >= 16 && seatNo <= 25) {
-        console.log("selected seats is between 5 and 15");
         reserv -= 10;
       }
       if (seatNo >= 31 && seatNo <= 35) {
-        console.log("selected seats is between 5 and 15");
         reserv += 5;
       }
       if (seatNo >= 36 && seatNo <= 40) {
-        console.log("selected seats is between 5 and 15");
         reserv -= 5;
       }
       // Connect to the database
@@ -47,7 +43,7 @@ export default async function handler(req, res) {
 
       // Find the bus by busNo
       const bus = await collection.findOne({ "formData.busNo": busNo });
-      console.log("busdetails", bus);
+
       if (!bus) {
         // If the bus is not found, return an error
         client.close();
@@ -58,7 +54,7 @@ export default async function handler(req, res) {
       const seatIndex = bus.formData.seats.findIndex(
         (seat) => seat.seatNo === seatNo
       );
-      console.log("seatindex", seatIndex);
+
       if (seatIndex === -1) {
         // If the seat is not found, return an error
         client.close();
@@ -77,7 +73,7 @@ export default async function handler(req, res) {
         seat_type: bus.formData.seats[seatIndex].seat_type,
         reserved: "",
       };
-      console.log("reserv number", reserv);
+
       bus.formData.seats[seatIndex + reserv] = {
         seatNo: bus.formData.seats[seatIndex + reserv].seatNo,
         price: bus.formData.seats[seatIndex + reserv].price,
@@ -89,7 +85,7 @@ export default async function handler(req, res) {
         seat_type: bus.formData.seats[seatIndex + reserv].seat_type,
         reserved: false,
       };
-      console.log(bus.formData.seats[seatIndex + reserv]);
+
       // Update the bus in the database
       await collection.updateOne({ _id: new ObjectId(bus._id) }, { $set: bus });
 

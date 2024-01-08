@@ -6,16 +6,12 @@ import SSeatIcon from "../svg/seatsvg";
 import Confirm from "./confrimbooking";
 import { useRouter } from "next/router";
 import Popup from "../loaders/popup";
-import SeatsSelection from "./seatsselection";
-
 import Seatsloader from "../loaders/seatsloader";
+
 export default function SeatSelection({ bus, callback, callback1 }) {
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seatDetails, setSeatDetails] = useState([]);
-  // const [nameerror, setNameerror] = useState(false);
-  // const [ageerror, setAgeerror] = useState(false);
-  // const [gendererror, setGendererror] = useState(false);
   const [nameErrors, setNameErrors] = useState({});
   const [ageErrors, setAgeErrors] = useState({});
   const [popup, setPopup] = useState(false);
@@ -31,9 +27,8 @@ export default function SeatSelection({ bus, callback, callback1 }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ _id: bus._id }), // Sending busId in the request body
+        body: JSON.stringify({ _id: bus._id }),
       });
-
       if (response.ok) {
         const data = await response.json();
         setProps(data.formData);
@@ -45,30 +40,21 @@ export default function SeatSelection({ bus, callback, callback1 }) {
       console.error("Error fetching seat data:", error);
     }
   };
-
-  // Call the fetchSeatList function when the component mounts
   useEffect(() => {
-    // This effect will run once when the component mounts
     fetchSeatList();
   }, []);
-
   // =========================================================================================================================================
   const handleSeatClick = (seatNo) => {
-    console.log("props", props);
     const clickedSeat = props.seats.find((seat) => seat.seatNo === seatNo);
-    console.log(clickedSeat);
-    const selectedSeatsLength =
-      Object.values(selectedSeats).filter(Boolean).length;
-    const isSeatSelected = selectedSeats.includes(seatNo);
 
+    const selectedSeatsLength = Object.values(selectedSeats).filter(Boolean)
+      .length;
+    const isSeatSelected = selectedSeats.includes(seatNo);
     if (clickedSeat.booked) {
-      // alert("Seat Already Booked");
       setMsg("Seat Already Booked");
       setPopup(true);
-
       return;
     }
-
     if (
       clickedSeat &&
       !clickedSeat.booked &&
@@ -80,12 +66,10 @@ export default function SeatSelection({ bus, callback, callback1 }) {
           ? prevSelectedSeats.filter((selectedSeat) => selectedSeat !== seatNo)
           : [...prevSelectedSeats, seatNo];
       });
-
       setSeatDetails((prevSeatDetails) => {
         const existingDetailIndex = prevSeatDetails.findIndex(
           (detail) => detail.seatNo === seatNo
         );
-
         if (existingDetailIndex !== -1) {
           const updatedSeatDetails = [...prevSeatDetails];
           updatedSeatDetails.splice(existingDetailIndex, 1);
@@ -93,7 +77,6 @@ export default function SeatSelection({ bus, callback, callback1 }) {
         }
         return [...prevSeatDetails, { seatNo, name: "", age: "", gender: "" }];
       });
-
       setNameErrors((prevNameErrors) => ({
         ...prevNameErrors,
         [seatNo]: false,
@@ -105,13 +88,10 @@ export default function SeatSelection({ bus, callback, callback1 }) {
       }));
     } else {
       setMsg("Maximum seats reached");
-
       setPopup(true);
     }
   };
-
   //  ===============================SEAT LAYOUT START==============================================================================================
-
   const renderSeats = () => {
     // =========================================1==================================================================================================
     const firstFiveSeats = props.seats.slice(0, 5).map((seat) => (
@@ -156,7 +136,6 @@ export default function SeatSelection({ bus, callback, callback1 }) {
         </div>
       </div>
     ));
-
     // ===================================================3======================================================================================
     const remainingSeats2 = props.seats.slice(15, 25).map((seat) => (
       <div
@@ -167,7 +146,6 @@ export default function SeatSelection({ bus, callback, callback1 }) {
           ${seat.booked ? classes.booked : ""}
           ${seat.booked && seat.gender === "female" ? classes.femalebooked : ""}
           ${!seat.booked && seat.reserved ? classes.femalereserved : ""}
-
           `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
@@ -188,8 +166,7 @@ export default function SeatSelection({ bus, callback, callback1 }) {
         ${classes.firstSeatub1}
         ${selectedSeats.includes(seat.seatNo) ? classes.selected : ""}
         ${seat.booked ? classes.booked : ""}
-        ${seat.booked && seat.gender === "female" ? classes.femalebooked : ""}
-        
+        ${seat.booked && seat.gender === "female" ? classes.femalebooked : ""} 
         `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
@@ -237,7 +214,6 @@ export default function SeatSelection({ bus, callback, callback1 }) {
       `}
         onClick={() => handleSeatClick(seat.seatNo)}
       >
-        {/* <p>|_ {seat.seatNo} - ${seat.price}_|</p> */}
         <div className={classes.seatImageContainer}>
           <SeatIcon
             selected={selectedSeats.includes(seat.seatNo)}
@@ -275,17 +251,14 @@ export default function SeatSelection({ bus, callback, callback1 }) {
     }
   }, [props]);
   // ================================SEAT LAYOUT END ==========================================================================================
-  const openConfirmationDialog = () => {
-    setConfirmationDialogOpen(true);
-  };
 
-  const closeConfirmationDialog = () => {
-    setConfirmationDialogOpen(false);
-  };
+  const popfun = () => setPopup(false);
+
+  const openConfirmationDialog = () => setConfirmationDialogOpen(true);
+  const closeConfirmationDialog = () => setConfirmationDialogOpen(false);
   // ==================================== POST REQUEST TO API=================================================================================
   async function confrimbook() {
     try {
-      // Send a POST request to your server to update the database
       const response = await fetch("/api/buslist", {
         method: "PUT",
         headers: {
@@ -297,32 +270,24 @@ export default function SeatSelection({ bus, callback, callback1 }) {
           seatDetails,
         }),
       });
-
       if (response.ok) {
-        console.log("Booking successful");
-
         setSelectedSeats([]);
         setSeatDetails([]);
         callback();
         callback1();
-      } else {
-        console.log("Booking failed");
       }
     } catch (error) {
       console.error("Error:", error);
     }
   }
-
   async function book() {
-    console.log("selectedSeats and seatDEtails", selectedSeats, seatDetails);
-    const selectedSeatsLength =
-      Object.values(selectedSeats).filter(Boolean).length;
+    const selectedSeatsLength = Object.values(selectedSeats).filter(Boolean)
+      .length;
     if (selectedSeatsLength === 0) {
       setMsg("No seats selected");
       setPopup(true);
       return;
     }
-
     const isSeatDetailsValid = seatDetails.every((detail) => {
       const isValidName =
         detail.name &&
@@ -332,54 +297,35 @@ export default function SeatSelection({ bus, callback, callback1 }) {
       const isValidGender =
         detail.gender &&
         (detail.gender === "male" || detail.gender === "female");
-
-      // Log specific errors for each seat
       if (!isValidName) {
-        // alert(`Invalid name for seat ${detail.seatNo}`);
         setMsg(`Invalid name for seat ${detail.seatNo}`);
         setPopup(true);
         return;
       }
       if (!isValidAge) {
-        // alert(`Invalid age for seat ${detail.seatNo}`);
         setMsg(`Invalid age for seat ${detail.seatNo}`);
         setPopup(true);
         return;
       }
       if (!isValidGender) {
-        // alert(`Invalid gender for seat ${detail.seatNo}`);
         setMsg(`Invalid gender for seat ${detail.seatNo}`);
         setPopup(true);
         return;
       }
-
       return isValidName && isValidAge && isValidGender;
     });
-
-    // if (!isSeatDetailsValid) {
-    //   alert("Please correct the errors in the seat details.");
-    //   return;
-    // }
     if (isSeatDetailsValid) {
       openConfirmationDialog();
     } else {
-      // alert("check the seat details");
-      // setMsg("Check the Seat Details");
-      // setPopup(true);
     }
   }
-  // =========================================================================================================================================
-
   // ====================================================TICKET DETAILS======================================================================
-
   const renderTicketDetails = () => {
-    console.log(selectedSeats);
     return selectedSeats.map((seatNo) => {
       const seatDetail = seatDetails.find((detail) => detail.seatNo === seatNo);
       const isSeatReservedForFemale = props.seats.find(
         (seat) => seat.seatNo === seatNo
       )?.reserved;
-
       return (
         <div key={seatNo} className={classes.ticketDetail}>
           <div>
@@ -392,7 +338,6 @@ export default function SeatSelection({ bus, callback, callback1 }) {
               <input
                 type="text"
                 value={seatDetail?.name || ""}
-                // seatDetail.name === "" ? "required" :
                 placeholder="Enter your name"
                 onChange={(e) =>
                   handleInputChange(seatNo, "name", e.target.value)
@@ -400,8 +345,7 @@ export default function SeatSelection({ bus, callback, callback1 }) {
               />
               <div className={classes.error}>
                 {seatDetail.name === ""
-                  ? // <p>*required</p>
-                    ""
+                  ? ""
                   : nameErrors[seatNo] && (
                       <p>
                         minimum of 3 characters. Should not allow numbers or any
@@ -410,7 +354,6 @@ export default function SeatSelection({ bus, callback, callback1 }) {
                     )}
               </div>
             </div>
-
             <label>Age:</label>
             <div className={classes.errordetails}>
               <input
@@ -424,10 +367,11 @@ export default function SeatSelection({ bus, callback, callback1 }) {
               <div className={classes.error}>
                 {seatDetail.age === ""
                   ? ""
-                  : ageErrors[seatNo] && <p>age should be above 5</p>}
+                  : ageErrors[seatNo] && (
+                      <p>age should be above 5 and below 100</p>
+                    )}
               </div>
             </div>
-
             <label>Gender:</label>
             <div className={classes.errordetails}>
               {isSeatReservedForFemale ? (
@@ -463,40 +407,30 @@ export default function SeatSelection({ bus, callback, callback1 }) {
       );
     });
   };
-
   const handleInputChange = (seatNo, field, value) => {
     if (field === "name") {
       if (value && value.length >= 3 && !!/^[a-zA-Z ]+$/.test(value)) {
-        // console.log("name satisfying the above criteria");
         setNameErrors((prevNameErrors) => ({
           ...prevNameErrors,
           [seatNo]: false,
         }));
       } else {
-        // console.error(
-        //   "Name is mandatory and should be at least 3 characters long."
-        // );
         setNameErrors((prevNameErrors) => ({
           ...prevNameErrors,
           [seatNo]: true,
         }));
       }
     } else if (field === "age") {
-      if (value && value > 5) {
-        // console.log("age satisfying the above criteria");
+      if (value && 5 < value && 100 > value) {
         setAgeErrors((prevAgeErrors) => ({
           ...prevAgeErrors,
           [seatNo]: false,
         }));
       } else {
-        // console.error(
-        //   "age is mandatory and should be at greater than 5 characters long."
-        // );
         setAgeErrors((prevAgeErrors) => ({ ...prevAgeErrors, [seatNo]: true }));
       }
     } else {
       if (!value) {
-        // console.error("gender is mandatory");
         setGenderErrors((prevGenderErrors) => ({
           ...prevGenderErrors,
           [seatNo]: true,
@@ -513,16 +447,13 @@ export default function SeatSelection({ bus, callback, callback1 }) {
     );
     setSeatDetails(updatedDetails);
   };
-  function popfun() {
-    setPopup(false);
-  }
   // ==========================================================================================================================================
   return (
     <div className={classes.busout}>
       {!props.busNo && <Seatsloader />}
       {popup && <Popup props={msg} callbackfun={popfun} />}
       <div className={classes.seatselectioncontainer}>
-        <h2>Bus-{props?.busNo}</h2> {/* Use optional chaining here */}
+        <h2>Bus-{props?.busNo}</h2>
         <div className={classes.split}>
           <div className={classes.seatselect}>
             {props?.busNo && renderSeats()}

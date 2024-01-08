@@ -20,9 +20,6 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import Typography from "@mui/material/Typography";
-
-import NavigationBar from "./navigationbar";
 
 const BusList = ({ onBackButtonClick }) => {
   const [busList, setBusList] = useState([]);
@@ -49,7 +46,6 @@ const BusList = ({ onBackButtonClick }) => {
     // Find the selected bus by _id
     const selected = busList.find((bus) => bus._id === _id);
     setSelectedBus(selected);
-    console.log(selected);
   };
 
   const handleDeleteBus = (_id) => {

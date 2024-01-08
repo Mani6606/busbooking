@@ -3,33 +3,29 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Addbus from "./addbus";
-import Buslist from "./buslist"; // Import the BusList component
+import Buslist from "./buslist";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import classes from "./adminhome.module.css";
 export default function AdminHome() {
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
+    await signOut({ callbackUrl: "/" });
   };
   const [addbus, setAddbus] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
     const logoutAfterTime = setTimeout(async () => {
-      await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
-    }, 10 * 60 * 1000); // 30 minutes in milliseconds
-
-    return () => clearTimeout(logoutAfterTime); // Clear the timeout on component unmount
+      await signOut({ callbackUrl: "/" });
+    }, 30 * 60 * 1000);
+    return () => clearTimeout(logoutAfterTime);
   }, []);
 
   useEffect(() => {
     getSession().then((session) => {
       if (!session || session.user.email !== "admin@gmail.com") {
         router.replace("/");
-      } else {
-        console.log(session.user.email);
-        console.log(session);
       }
     });
   }, []);

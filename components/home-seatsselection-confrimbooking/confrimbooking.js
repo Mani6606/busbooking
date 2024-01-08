@@ -17,7 +17,6 @@ export default function Confirm({
   selectedSeats,
   onConfirm,
 }) {
-  console.log("seatdetails ---------------------", seatDetails);
   // Calculate total cost based on the prices associated with selected seats
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const totalCost = selectedSeats.reduce((total, seatNo) => {
@@ -28,7 +27,7 @@ export default function Confirm({
     );
 
     const details = seatDetails[seatIndex];
-    console.log("asdddddddddddddddddddddddddddddddddddddddseat", details);
+
     seatDetails[seatIndex] = {
       seatNo: seatNo,
       price: seat.price,
@@ -41,35 +40,12 @@ export default function Confirm({
     return total + (seat ? seat.price : 0);
   }, 0);
   const handleConfirm = () => {
-    // Assume a successful booking response for demonstration purposes
-    // In your actual code, you would replace the following line with the logic to handle API calls and responses
     setBookingSuccess(true);
     onConfirm();
   };
   return (
     <Container sx={{ position: "relative" }}>
-      {bookingSuccess && (
-        // <Box
-        //   mt={10}
-        //   sx={{
-        //     position: "absolute",
-        //     marginLeft: "40%",
-        //     textAlign: "center",
-        //     backgroundColor: "#4CAF50", // Green background color
-        //     color: "white",
-        //     padding: "15px",
-        //     borderRadius: "5px",
-        //     width: "200px",
-        //     display: "flex",
-        //     justifyContent: "center",
-        //     alignItems: "center",
-        //     boxShadow: "4px 4px 4px 4px #4CAF50",
-        //   }}
-        // >
-        //   <Typography variant="h6">Booking Successful!</Typography>
-        // </Box>
-        <Loader />
-      )}
+      {bookingSuccess && <Loader />}
 
       <div className={bookingSuccess && classes.dimmed}>
         <Box

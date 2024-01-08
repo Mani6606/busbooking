@@ -3,7 +3,6 @@
 import classes from "./popup.module.css";
 
 export default function Popup({ props, callbackfun }) {
-  console.log("popup working");
   const handleclick = () => {
     callbackfun();
   };

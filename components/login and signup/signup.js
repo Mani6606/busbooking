@@ -34,8 +34,8 @@ export default function SignUp({ props }) {
     event.preventDefault();
     setShowPasswordcon(!showPasswordcon);
   };
-  const inputTypecon = showPasswordcon ? "text" : "password";
-  const inputType = showPassword ? "text" : "password";
+  // const inputTypecon = showPasswordcon ? "text" : "password";
+  // const inputType = showPassword ? "text" : "password";
 
   function Email() {
     setEmail("");
@@ -53,8 +53,7 @@ export default function SignUp({ props }) {
   }
 
   function isValidPassword(password) {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
   }
 
@@ -70,14 +69,12 @@ export default function SignUp({ props }) {
 
     if (!isValidEmail(email)) {
       setEmailError("Invalid email address");
-      console.log("email", !isValidEmail(email));
 
       setTimeout(Email, 600);
     }
 
     if (!isValidPassword(password)) {
       setPasswordError("Invalid password");
-      console.log("password", !isValidPassword(password));
 
       setTimeout(Password, 600);
     }
@@ -102,7 +99,6 @@ export default function SignUp({ props }) {
       });
       const jsonData = await responce.json();
       if (responce.ok) {
-        console.log(jsonData.msg);
         const response = await signIn("credentials", {
           redirect: false,
           Email: email,
@@ -111,8 +107,6 @@ export default function SignUp({ props }) {
 
         router.replace("/home");
       } else {
-        console.log(jsonData.msg);
-        console.log("faied");
         alert("The email is already used");
         setEmail("");
         setPassword("");
@@ -124,7 +118,6 @@ export default function SignUp({ props }) {
   }
 
   useEffect(() => {
-   
     document.addEventListener("DOMContentLoaded", function () {
       const signupForm = document.querySelector(".signupform");
       if (signupForm) {
@@ -153,7 +146,7 @@ export default function SignUp({ props }) {
           <div>
             <label htmlFor="password">Password</label>
             <input
-              type={inputType}
+              type={showPassword ? "text" : "password"}
               id="password"
               value={password}
               placeholder="password"
@@ -170,7 +163,7 @@ export default function SignUp({ props }) {
             <div className={classes.error}>{passwordError}</div>
             <label htmlFor="password">Confrim Password</label>
             <input
-              type={inputTypecon}
+              type={showPasswordcon ? "text" : "password"}
               id="confrimpassword"
               value={confrimpassword}
               placeholder="confrim password"

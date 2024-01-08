@@ -10,7 +10,7 @@ const dbName = "my-site";
 async function ConnectToDatabase() {
   // if (cachedClient) {
   //   return cachedClient;
-  //   console.log("cached client");
+  //
   // } else {
   const client = new MongoClient(uri);
   await client.connect();
@@ -24,25 +24,19 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const { formData } = req.body;
-      console.log("formdata", formData);
+
       const client = await ConnectToDatabase();
       const db = client.db("my-site");
       const collection = db.collection("buslist");
-
-      // Check if formData.busNo already exists in the collection
       const existingBus = await collection.findOne({
         "formData.busNo": formData.busNo,
       });
 
       if (existingBus) {
-        // If busNo already exists, send a response indicating it's a duplicate
         client.close();
         return res.status(400).json({ message: "Bus number already exists" });
       }
-
-      // If busNo doesn't exist, insert the new document
       const result = await collection.insertOne({ formData });
-
       client.close();
       res.status(200).json({ message: "Message stored successfully" });
     } catch (error) {
@@ -55,7 +49,6 @@ export default async function handler(req, res) {
   else if (req.method === "DELETE") {
     try {
       const { _id } = req.body;
-      // console.log("Received DELETE request with _id:", _id);
 
       const client = await ConnectToDatabase();
       const db = client.db("my-site");
@@ -78,12 +71,6 @@ export default async function handler(req, res) {
   else if (req.method === "PUT") {
     try {
       const { busNo, selectedSeats, seatDetails } = req.body;
-      console.log(
-        "Received PUT request with busno:",
-        busNo,
-        selectedSeats,
-        seatDetails
-      );
 
       const client = await ConnectToDatabase();
       const db = client.db("my-site");
@@ -105,26 +92,21 @@ export default async function handler(req, res) {
           (seat) => seat.seatNo === selectedSeat
         );
         if (selectedSeat >= 6 && selectedSeat <= 15) {
-          console.log("selected seats is between 5 and 15");
           reserv += 10;
         }
         if (selectedSeat >= 16 && selectedSeat <= 25) {
-          console.log("selected seats is between 5 and 15");
           reserv -= 10;
         }
         if (selectedSeat >= 31 && selectedSeat <= 35) {
-          console.log("selected seats is between 5 and 15");
           reserv += 5;
         }
         if (selectedSeat >= 36 && selectedSeat <= 40) {
-          console.log("selected seats is between 5 and 15");
           reserv -= 5;
         }
         if (
           !existingBus.formData.seats[seatIndex + reserv].booked &&
           seatDetails[seatIndexx].gender === "female"
         ) {
-          console.log("plus 10seats is not booked and the gender is female");
           existingBus.formData.seats[seatIndex + reserv] = {
             seatNo: existingBus.formData.seats[seatIndex + reserv].seatNo,
             price: existingBus.formData.seats[seatIndex + reserv].price,
@@ -136,14 +118,8 @@ export default async function handler(req, res) {
             seat_type: existingBus.formData.seats[seatIndex + reserv].seat_type,
             reserved: true,
           };
-          console.log(
-            "reserved bus details",
-            existingBus.formData.seats[seatIndex + reserv]
-          );
         }
 
-        console.log("seatIndex", seatIndex);
-        console.log("name", seatDetails[seatIndexx]?.name);
         // ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
         existingBus.formData.seats[seatIndex] = {
           seatNo: existingBus.formData.seats[seatIndex].seatNo,
@@ -156,18 +132,6 @@ export default async function handler(req, res) {
           seat_type: existingBus.formData.seats[seatIndex].seat_type,
           reserved: false,
         };
-
-        // ??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-        //   if (seatIndex !== -1) {
-        //     console.log("check...", existingSeats[seatIndex].name);
-        //     // Update details for the selected seat
-        //     existingSeats[seatIndex].name=seatDetails[selectedSeat]?.name || "";
-        //     existingSeats[seatIndex].age = seatDetails[selectedSeat]?.age || "";
-        //     existingSeats[seatIndex].booked = true;
-        //     existingSeats[seatIndex].gender =
-        //       seatDetails[selectedSeat]?.gender || "";
-        //     // Add additional parameters as needed
-        //   }
       });
 
       // Update the bus document with the modified seats array

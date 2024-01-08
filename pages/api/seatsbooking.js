@@ -15,10 +15,8 @@ export async function connectToDB() {
 export default async function handler(req, res) {
   const dbName = "my-site";
   if (req.method === "POST") {
-    console.log("Entering into the GET request block");
     try {
       const { _id } = req.body;
-      console.log(_id);
 
       if (!_id) {
         res.status(400).json({ error: "Bus ID is required" });
@@ -30,8 +28,6 @@ export default async function handler(req, res) {
       const collection = db.collection("buslist");
       const objectId = new ObjectId(_id);
       const busDetails = await collection.findOne({ _id: objectId });
-
-      console.log("busDetails", busDetails);
 
       if (!busDetails) {
         res.status(404).json({ error: "Bus not found" });

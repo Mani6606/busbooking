@@ -1,3 +1,12 @@
+.mes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.mes h2 {
+  color: aliceblue;
+}
 .fullpage {
   position: relative;
   height: 99vh;

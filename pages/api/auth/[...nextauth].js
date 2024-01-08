@@ -33,13 +33,10 @@ const authOptions = {
           const user = await userCollection.findOne({
             Email: credentials.Email,
           });
-          console.log("credentials", user);
 
           if (!user) {
             throw new Error("User not found");
           }
-
-          console.log("password check", credentials.Password, user.Password);
 
           if (!(credentials.Password === user.Password)) {
             throw new Error(

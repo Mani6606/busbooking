@@ -22,7 +22,7 @@ export default function Login() {
     event.preventDefault();
     setIsSignUp((prevIsSignup) => !prevIsSignup);
   };
-  const inputType = showPassword ? "text" : "password";
+  // const inputType = showPassword ? "text" : "password";
 
   function setDetails() {
     setEmail("");
@@ -42,12 +42,8 @@ export default function Login() {
       });
 
       if (response.ok) {
-        console.log("success");
-        console.log(response);
         router.replace("/adminhome");
       } else {
-        console.log(response);
-        console.log("failed");
         setUserpassword("Invalid Username or password");
         setTimeout(setDetails, 400);
       }
@@ -56,7 +52,7 @@ export default function Login() {
     } else {
       setLoading(true);
       setUserpassword("");
-      console.log({ email, password });
+
       const response = await signIn("credentials", {
         redirect: false,
         Email: email,
@@ -64,12 +60,8 @@ export default function Login() {
       });
 
       if (!response.error) {
-        console.log("success");
-        console.log(response);
         router.replace("/home");
       } else {
-        console.log(response.error);
-        console.log("failed");
         setUserpassword("Invalid Username or password");
         setTimeout(setDetails, 400);
       }
@@ -99,6 +91,7 @@ export default function Login() {
       <div className={classes.header}>
         <h1>Welcome!</h1>
       </div>
+
       {isSignUp ? (
         <SignUp props={switchsignin} />
       ) : (
@@ -123,7 +116,7 @@ export default function Login() {
                 <label htmlFor="password">Password</label>
                 <div className={classes.passwordinput}>
                   <input
-                    type={inputType}
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

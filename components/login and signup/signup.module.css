@@ -71,7 +71,8 @@
   color: rgb(40, 11, 11);
 }
 
-.signupform input {
+.signupform input[type="password"] {
+  appearance: none;
   padding: 10px;
   color: rgb(0, 0, 0);
   margin-bottom: 5%;

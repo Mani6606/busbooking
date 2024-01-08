@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Popup from "../loaders/popup";
+import Success from "../loaders/success";
+
 import {
   TextField,
   Button,
@@ -12,6 +14,7 @@ import { useRouter } from "next/router";
 import classes from "./addbus.module.css";
 export default function Addbus({ onBackButtonClick }) {
   const [popup, setPopup] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [msg, setMsg] = useState("");
   function callback() {
     setPopup(false);
@@ -90,7 +93,7 @@ export default function Addbus({ onBackButtonClick }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+
     if (
       formData.busNo &&
       formData.arrivalTime &&
@@ -113,15 +116,15 @@ export default function Addbus({ onBackButtonClick }) {
             setMsg("Bus number already exists");
           }
           if (data.message === "Message stored successfully") {
-            setPopup(true);
-            setMsg("Bus Added successfully");
+            setSuccess(true);
+            setTimeout(() => {
+              setSuccess(false);
+            }, 2500);
           }
           if (data.message === "Internal server error") {
             setPopup(true);
             setMsg("Internal server error");
           }
-
-          console.log("API Response:", data.message);
 
           setFormData({
             busNo: "",
@@ -158,6 +161,7 @@ export default function Addbus({ onBackButtonClick }) {
       }}
     >
       {popup && <Popup props={msg} callbackfun={callback} />}
+      {success && <Success props={"Bus Added"} />}
       <button className={classes.close} onClick={onBackButtonClick}>
         <svg viewBox="0 0 10 10">
           <polygon points="10.2,0.7 9.5,0 5.1,4.4 0.7,0 0,0.7 4.4,5.1 0,9.5 0.7,10.2 5.1,5.8 9.5,10.2 10.2,9.5 5.8,5.1"></polygon>
