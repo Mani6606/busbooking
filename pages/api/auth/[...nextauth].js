@@ -6,12 +6,18 @@ const uri = process.env.MONGODB_URI;
 let cachedClient = null;
 
 async function connectToDB() {
-  if (cachedClient) {
-    return cachedClient;
-  } else {
+  try {
+    // if (cachedClient) {
+    //   return cachedClient;
+    // } else {
     const client = new MongoClient(uri);
     cachedClient = await client.connect();
+    console.log("Connected to MongoDB");
     return cachedClient;
+  } catch (error) {
+    // }
+    console.error("MongoDB connection error:", error.message);
+    throw error;
   }
 }
 
@@ -23,34 +29,36 @@ const authOptions = {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        let client;
-
+        let cl;
         try {
-          const cl = await connectToDB();
-          client = await cl.connect();
-          const db = await client.db("my-site");
+          console.log("Authorizing with credentials:", credentials);
+          cl = await connectToDB();
+          const db = await cl.db("my-site");
           const userCollection = await db.collection("userInfo");
           const user = await userCollection.findOne({
             Email: credentials.Email,
           });
 
           if (!user) {
+            console.log("User not found");
             throw new Error("User not found");
           }
 
           if (!(credentials.Password === user.Password)) {
+            console.log("Invalid password");
             throw new Error(
               "Invalid password. Please enter the correct password"
             );
           }
 
+          console.log("Authorization successful");
           return { email: credentials.Email };
         } catch (error) {
-          console.error("MongoDB error:", error.message);
-          throw error; // Rethrow the error after logging
+          console.error("Authorization error:", error.message);
+          throw error;
         } finally {
-          if (client) {
-            await client.close();
+          if (cl) {
+            await cl.close();
           }
         }
       },

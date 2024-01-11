@@ -36,11 +36,6 @@
   /* margin-top: 100px; */
 }
 
-.listfull:hover {
-  border: 2px solid white;
-  transition: border 0.6s ease;
-}
-
 .listfull {
   display: flex;
   align-items: center;
@@ -59,14 +54,25 @@
   background-color: rgba(0, 0, 0, 0.429);
   transition: border-radius 0.3s ease, box-shadow 0.3s ease,
     background-color 0.3s ease;
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
+.listfull:hover {
+  transform: scale(1.1);
+}
+
+/* Apply styles to other .listfull elements when one is hovered */
+.listfull:hover ~ .listfull {
+  filter: blur(10px);
+  transform: scale(0.9);
+}
 .heading {
   font-weight: bold;
   font-size: 23px;
   margin-right: 5px;
   color: rgb(47, 180, 54);
   transition: color 0.3s ease;
+  text-shadow: 0px 0px 2px rgb(0, 0, 0);
 }
 
 .value {
@@ -75,4 +81,6 @@
   margin-right: 20px;
   color: rgb(25, 190, 255);
   transition: color 0.3s ease;
+  /* box-shadow: 0px 0px 5px 2px rgb(255, 255, 255); */
+  text-shadow: 0px 0px 1px rgb(0, 238, 255);
 }

@@ -189,41 +189,45 @@ const BusList = () => {
           <List sx={{ marginTop: "100px" }}>
             {busList.map((bus) => (
               <div key={bus.busNo} className={classes.listfull}>
-                <div className={classes.list}>
-                  <div className={classes.heading}>Bus No: </div>
-                  <div className={classes.value}>{bus.formData.busNo}</div>
-                  <div className={classes.heading}> From: </div>
-                  <div className={classes.value}>{bus.formData.from}</div>
-                  <div className={classes.heading}> To: </div>
-                  <div className={classes.value}> {bus.formData.to}</div>
-                  <div className={classes.heading}>Departure Time: </div>
-                  <div className={classes.value}>
-                    {bus.formData.departureTime}
-                  </div>
-                  <div className={classes.heading}> Arrival Time: </div>
-                  <div className={classes.value}>
-                    {bus.formData.arrivalTime}
+                <div className={classes.busDetails}>
+                  <div className={classes.list}>
+                    <div className={classes.heading}>Bus No: </div>
+                    <div className={classes.value}>{bus.formData.busNo}</div>
+                    <div className={classes.heading}> From: </div>
+                    <div className={classes.value}>{bus.formData.from}</div>
+                    <div className={classes.heading}> To: </div>
+                    <div className={classes.value}> {bus.formData.to}</div>
+                    <div className={classes.heading}>Departure Time: </div>
+                    <div className={classes.value}>
+                      {bus.formData.departureTime}
+                    </div>
+                    <div className={classes.heading}> Arrival Time: </div>
+                    <div className={classes.value}>
+                      {bus.formData.arrivalTime}
+                    </div>
                   </div>
                 </div>
 
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => handleViewSeats(bus._id)}
-                  sx={{
-                    color: "orange",
-                    borderRadius: "5px",
-                    fontWeight: "bold",
-                    ":hover": {
-                      opacity: "1",
-                      borderRadius: "20px",
-                      border: "2px solid blue",
-                      // transition: "border 0.2s ease,borderRadius 0.2s ease",
-                    },
-                  }}
-                >
-                  View Seats
-                </Button>
+                <div className={classes.buttonContainer}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => handleViewSeats(bus._id)}
+                    sx={{
+                      color: "orange",
+                      borderRadius: "5px",
+                      fontWeight: "bold",
+                      ":hover": {
+                        opacity: "1",
+                        borderRadius: "20px",
+                        border: "2px solid blue",
+                        // transition: "border 0.2s ease,borderRadius 0.2s ease",
+                      },
+                    }}
+                  >
+                    View Seats
+                  </Button>
+                </div>
               </div>
             ))}
           </List>

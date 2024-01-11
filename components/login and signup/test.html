@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speech Synthesis Example</title>
+  </head>
+  <body>
+    <script>
+      function speak(text) {
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = text;
+        utterance.voice = speechSynthesis.getVoices()[0];
+        speechSynthesis.speak(utterance);
+      }
+
+      // Example usage
+      speak("Hello, this is a sample text. How are you today?");
+    </script>
+    <h1>sdfdsfdafdasf</h1>
+  </body>
+</html>

@@ -1,89 +1,79 @@
+import classes from "./login.module.css";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import SignUp from "./signup";
 import Image from "next/image";
-import classes from "./login.module.css";
-import Link from "next/link";
-
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userpassword, setUserpassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [formState, setFormState] = useState({
-    email: "",
-    password: "",
-    userpassword: "",
-    loading: false,
-  });
   const [showPassword, setShowPassword] = useState(true);
   const [isSignUp, setIsSignUp] = useState(false);
-
   const togglePasswordVisibility = (event) => {
     event.preventDefault();
     setShowPassword(!showPassword);
   };
-
-  const switchSignIn = (event) => {
+  const switchsignin = (event) => {
     event.preventDefault();
     setIsSignUp((prevIsSignup) => !prevIsSignup);
   };
+  // const inputType = showPassword ? "text" : "password";
 
-  const setDetails = () => {
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      email: "",
-      password: "",
-    }));
-  };
-
+  function setDetails() {
+    setEmail("");
+    setPassword("");
+  }
   useEffect(() => {
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      userpassword: "",
-    }));
-  }, [formState.email, formState.password]);
+    setUserpassword("");
+  }, [email, password]);
+  async function loginHandler() {
+    if (email === "admin@gmail.com" && password === "Admin@1234") {
+      setLoading(true);
+      setUserpassword("");
+      const response = await signIn("credentials", {
+        redirect: false,
+        Email: email,
+        Password: password,
+      });
 
-  const adminCredentials = {
-    email: "admin@gmail.com",
-    password: "Admin@1234",
-  };
+      if (response.ok) {
+        router.replace("/adminhome");
+      } else {
+        setUserpassword("Invalid Username or password");
+        setTimeout(setDetails, 1500);
+      }
 
-  const loginHandler = async () => {
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      loading: true,
-      userpassword: "",
-    }));
-
-    const response = await signIn("credentials", {
-      redirect: false,
-      Email: formState.email,
-      Password: formState.password,
-    });
-
-    if (
-      (formState.email === adminCredentials.email &&
-        formState.password === adminCredentials.password) ||
-      (!response.error && !formState.email.startsWith("admin"))
-    ) {
-      router.replace(
-        formState.email === adminCredentials.email ? "/adminhome" : "/home"
-      );
+      setLoading(false);
     } else {
-      setFormState((prevFormState) => ({
-        ...prevFormState,
-        userpassword: "Invalid Username or password",
-      }));
-      setTimeout(setDetails, 400);
+      setLoading(true);
+      setUserpassword("");
+
+      const response = await signIn("credentials", {
+        redirect: false,
+        Email: email,
+        Password: password,
+      });
+
+      if (!response.error) {
+        router.replace("/home");
+      } else {
+        alert("working");
+        setUserpassword("Invalid Username or password");
+        setTimeout(setDetails, 1500);
+        alert("ellsss");
+      }
+
+      setLoading(false);
     }
-
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      loading: false,
-    }));
-  };
-
+  }
+  // JavaScript to add the class to trigger the animation
   useEffect(() => {
+    // Wrap the code in a "DOMContentLoaded" event listener
     document.addEventListener("DOMContentLoaded", function () {
       const signupForm = document.querySelector(".signupform");
       if (signupForm) {
@@ -95,7 +85,7 @@ export default function Login() {
   return (
     <div className={classes.fullpage}>
       <Image
-        src="/background.jpg"
+        src="/background.jpg" // Replace with the actual path to your image
         alt="Background Image"
         layout="fill"
         objectFit="cover"
@@ -105,26 +95,20 @@ export default function Login() {
       </div>
 
       {isSignUp ? (
-        <SignUp props={switchSignIn} />
+        <SignUp props={switchsignin} />
       ) : (
         <div className={classes.signupcontainer}>
           <div className={classes.signupform}>
             <h1>Login</h1>
-
             <form>
               <div>
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
                   id="email"
-                  value={formState.email}
+                  value={email}
                   placeholder="Email id"
-                  onChange={(e) =>
-                    setFormState((prevFormState) => ({
-                      ...prevFormState,
-                      email: e.target.value,
-                    }))
-                  }
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   className={classes.signupinput}
                 />
@@ -135,18 +119,12 @@ export default function Login() {
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
-                    value={formState.password}
-                    onChange={(e) =>
-                      setFormState((prevFormState) => ({
-                        ...prevFormState,
-                        password: e.target.value,
-                      }))
-                    }
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="password"
-                    className={classes.signupinput}
                     required
+                    className={classes.signupinput}
                   />
-
                   <button
                     className={classes.visiblebutton}
                     onClick={togglePasswordVisibility}
@@ -154,25 +132,28 @@ export default function Login() {
                     {showPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
                 </div>
-                <div className={classes.error}>{formState.userpassword}</div>
+                <div className={classes.error}>{userpassword}</div>
               </div>
               <center>
-                <button
-                  onClick={loginHandler}
+                {/* <button
                   type="button"
-                  className={classes["btn-23"]}
+                  onClick={loginHandler}
+                  className={classes.signupbutton}
                 >
+                  {loading ? "Logging in..." : "Login"}
+                </button> */}
+                <button onClick={loginHandler} className={classes["btn-23"]}>
                   <span className={classes.text}>
-                    {formState.loading ? "Logging in..." : "Login"}
+                    {loading ? "Logging in..." : "Login"}
                   </span>
                   <span aria-hidden="" className={classes.marquee}>
-                    {formState.loading ? "Logging in... " : "Login"}
+                    {loading ? "Logging in... " : "Login"}
                   </span>
                 </button>
               </center>
             </form>
             <center className={classes.register}>
-              <Link href="" onClick={switchSignIn}>
+              <Link href="" onClick={switchsignin}>
                 SignUp
               </Link>
             </center>

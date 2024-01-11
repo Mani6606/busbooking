@@ -1,105 +1,104 @@
-import React, { useState, Suspense, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import classes from "./signup.module.css";
 
-function Header(props) {
+function Header({ children }) {
   return (
-    <>
-      <div className={classes.header}>
-        <h1>Welcome!</h1>
-      </div>
-      {props.children}
-    </>
+    <div className={classes.header}>
+      <h1>Welcome!</h1>
+      {children}
+    </div>
   );
 }
+
 export default function SignUp({ props }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confrimpassword, setConfrimpassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [passwordcheck, setPasswordcheck] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordcon, setShowPasswordcon] = useState(false);
-  const togglePasswordVisibility = (event) => {
-    event.preventDefault();
-    setShowPassword(!showPassword);
-  };
-  const togglePasswordVisibilitycon = (event) => {
-    event.preventDefault();
-    setShowPasswordcon(!showPasswordcon);
-  };
-  // const inputTypecon = showPasswordcon ? "text" : "password";
-  // const inputType = showPassword ? "text" : "password";
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [tooltip, setTooltip] = useState(false);
+  const [tooltippass, setTooltippass] = useState(false);
 
-  function Email() {
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () =>
+    setShowConfirmPassword(!showConfirmPassword);
+
+  const resetFields = () => {
     setEmail("");
-  }
-  function Password() {
     setPassword("");
-    setConfrimpassword("");
-  }
+    setConfirmPassword("");
+  };
+
+  const tooltipOnOff = () => setTooltip((prevTooltip) => !prevTooltip);
+  const tooltipOnOffPass = () => setTooltippass((prevTooltip) => !prevTooltip);
+
   useEffect(() => {
-    setEmailError(""), setPasswordError(""), setPasswordcheck("");
-  }, [email, password, confrimpassword]);
-  function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  function isValidPassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
-  }
-
-  function isMatching(password, confrimpassword) {
-    return password === confrimpassword;
-  }
-
-  async function handleSignUp() {
     setEmailError("");
     setPasswordError("");
-    setPasswordcheck("");
+    setConfirmPasswordError("");
+  }, [email, password, confirmPassword]);
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[a-z][a-z0-9._%+-]*@[a-z0-9.-]+\.[a-z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const isMatching = (password, confirmPassword) =>
+    password === confirmPassword;
+
+  const handleSignUp = async () => {
+    setEmailError("");
+    setPasswordError("");
+    setConfirmPasswordError("");
     setLoading(true);
 
     if (!isValidEmail(email)) {
       setEmailError("Invalid email address");
-
-      setTimeout(Email, 600);
+      setTimeout(resetFields, 1500);
     }
 
     if (!isValidPassword(password)) {
       setPasswordError("Invalid password");
-
-      setTimeout(Password, 600);
+      setTimeout(resetFields, 1500);
     }
 
-    if (!isMatching(password, confrimpassword)) {
-      setPasswordcheck("password Mismatch");
-      setTimeout(Password, 600);
+    if (!isMatching(password, confirmPassword)) {
+      setConfirmPasswordError("Password mismatch");
+      setTimeout(resetFields, 1500);
     }
 
     if (
       !isValidEmail(email) ||
       !isValidPassword(password) ||
-      !isMatching(password, confrimpassword)
+      !isMatching(password, confirmPassword)
     ) {
       setLoading(false);
       return;
-    } else {
-      const responce = await fetch("/api/signup", {
+    }
+
+    try {
+      const response = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const jsonData = await responce.json();
-      if (responce.ok) {
-        const response = await signIn("credentials", {
+
+      if (response.ok) {
+        await signIn("credentials", {
           redirect: false,
           Email: email,
           Password: password,
@@ -108,48 +107,76 @@ export default function SignUp({ props }) {
         router.replace("/home");
       } else {
         alert("The email is already used");
-        setEmail("");
-        setPassword("");
-        setConfrimpassword("");
-        setLoading(false);
+        resetFields();
       }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      setLoading(false);
     }
-    setLoading(false);
-  }
+  };
 
   useEffect(() => {
-    document.addEventListener("DOMContentLoaded", function () {
-      const signupForm = document.querySelector(".signupform");
-      if (signupForm) {
-        signupForm.classList.add("animate");
-      }
-    });
+    const signupForm = document.querySelector(".signupform");
+    if (signupForm) {
+      signupForm.classList.add("animate");
+    }
   }, []);
+
   return (
     <div className={classes.signupcontainer}>
+      {/* Tooltips */}
+      <div className={classes.tooltip} onClick={tooltipOnOff}>
+        <div className={classes.icon}>i</div>
+        <div className={classes.tooltiptext}>Email Requirements</div>
+      </div>
+
+      <div className={classes.tooltippass} onClick={tooltipOnOffPass}>
+        <div className={classes.icon}>i</div>
+        <div className={classes.tooltiptext}>Password Requirements</div>
+      </div>
+
+      {/* Email Requirements Tooltip */}
+      {(emailError || tooltip) && (
+        <div className={classes.legendemail}>
+          <p>Rules for a valid email address:</p>
+          {/* ... (rest of the content) */}
+        </div>
+      )}
+
+      {/* Password Requirements Tooltip */}
+      {(passwordError || tooltippass) && (
+        <div className={classes.legendpassword}>
+          <p>Rules for a valid password:</p>
+          {/* ... (rest of the content) */}
+        </div>
+      )}
+
+      {/* Signup Form */}
       <div className={classes.signupform}>
         <h1>Sign Up</h1>
 
         <form>
+          {/* Email Input */}
           <label htmlFor="email">Email</label>
           <input
             type="email"
             id="email"
             value={email}
-            placeholder="Email id "
+            placeholder="Email id"
             onChange={(e) => setEmail(e.target.value)}
             required
             className={classes.signupinput}
           />
           <div className={classes.error}>{emailError}</div>
 
+          {/* Password Input */}
           <div>
             <label htmlFor="password">Password</label>
             <input
               type={showPassword ? "text" : "password"}
               id="password"
               value={password}
-              placeholder="password"
+              placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               required
               className={classes.signupinput}
@@ -161,36 +188,42 @@ export default function SignUp({ props }) {
               {showPassword ? <FiEye /> : <FiEyeOff />}
             </button>
             <div className={classes.error}>{passwordError}</div>
-            <label htmlFor="password">Confrim Password</label>
+
+            {/* Confirm Password Input */}
+            <label htmlFor="confirmPassword">Confirm Password</label>
             <input
-              type={showPasswordcon ? "text" : "password"}
-              id="confrimpassword"
-              value={confrimpassword}
-              placeholder="confrim password"
-              onChange={(e) => setConfrimpassword(e.target.value)}
+              type={showConfirmPassword ? "text" : "password"}
+              id="confirmPassword"
+              value={confirmPassword}
+              placeholder="Confirm Password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
               className={classes.signupinput}
             />
             <button
               className={classes.visiblebutton}
-              onClick={togglePasswordVisibilitycon}
+              onClick={toggleConfirmPasswordVisibility}
             >
-              {showPasswordcon ? <FiEye /> : <FiEyeOff />}
+              {showConfirmPassword ? <FiEye /> : <FiEyeOff />}
             </button>
-            <div className={classes.error}>{passwordcheck}</div>
+            <div className={classes.error}>{confirmPasswordError}</div>
           </div>
 
+          {/* Signup Button */}
           <center>
             <button
               type="button"
               onClick={handleSignUp}
               className={classes.signupbutton}
+              disabled={loading}
             >
               {loading ? "Signing in..." : "Sign Up"}
             </button>
           </center>
+
+          {/* Login Option */}
           <div className={classes.loginoption}>
-            <h4>Already having an account </h4>
+            <h4>Already have an account</h4>
             <Link href="" onClick={props}>
               SignIn
             </Link>

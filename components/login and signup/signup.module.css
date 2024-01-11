@@ -1,7 +1,167 @@
 /* Default styles for larger screens */
+.tooltip {
+  position: absolute;
+  top: 10%;
+  left: 160%;
+  display: inline-block;
+  cursor: pointer;
+  font-family: "Arial", sans-serif;
+}
 
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #333 transparent;
+}
+
+.tooltip .icon {
+  display: inline-block;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 23px;
+  width: 20px;
+  height: 20px;
+  background-color: #51e051;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+}
+/* Default styles for larger screens */
+.tooltippass {
+  position: absolute;
+  top: 10%;
+  left: -100%;
+  display: inline-block;
+  cursor: pointer;
+  font-family: "Arial", sans-serif;
+}
+
+.tooltippass:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #333 transparent;
+}
+
+.tooltippass .icon {
+  display: inline-block;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 23px;
+  width: 20px;
+  height: 20px;
+  background-color: #32ca1a;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+
+  line-height: 20px;
+}
+
+.legendemail {
+  background-color: rgba(253, 253, 253, 0.648);
+  border-radius: 20px;
+  width: 350px;
+  position: absolute;
+  left: 120%;
+  top: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.legendemail p {
+  font-size: 18px;
+  color: rgb(93, 0, 0);
+  padding-left: 50px;
+  padding-top: 10px;
+  font-weight: bold;
+  margin: 0px;
+  /* background-color: rgb(128, 128, 128); */
+  align-items: center;
+  width: 300px;
+}
+.legendpassword {
+  background-color: rgba(253, 253, 253, 0.648);
+  border-radius: 20px;
+  width: 350px;
+  position: absolute;
+  left: -110%;
+  top: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.legendpassword p {
+  font-size: 18px;
+  color: rgb(93, 0, 0);
+  padding-left: 50px;
+  padding-top: 10px;
+  font-weight: bold;
+  margin: 0px;
+  /* background-color: rgb(128, 128, 128); */
+  align-items: center;
+  width: 300px;
+}
 .loginoption {
   text-align: center;
+  color: #ffffff;
+  text-shadow: 0px 0px 0px 1px rgb(0, 0, 0);
   margin-top: 20px;
 }
 
@@ -53,16 +213,21 @@
   justify-content: center;
   flex-direction: column;
 }
+.signupinput {
+  text-shadow: 0px 0px 10px rgb(0, 0, 0);
+  font-weight: bold;
+}
 
 .signupform h1 {
   padding-bottom: 10%;
   text-align: center;
-
+  text-shadow: 2px 2px 4px rgb(255, 255, 255);
   margin-top: -7px;
 }
 
 .signupform label {
   display: block;
+  text-shadow: 0px 0px 3px white;
   margin-bottom: 10px;
   font-weight: bold;
   text-align: center;
@@ -71,20 +236,6 @@
   color: rgb(40, 11, 11);
 }
 
-.signupform input[type="password"] {
-  appearance: none;
-  padding: 10px;
-  color: rgb(0, 0, 0);
-  margin-bottom: 5%;
-  background-color: rgba(245, 245, 245, 0);
-  font-size: 15px;
-  width: 90%;
-  border: none;
-  /* border-radius: ; */
-  outline: none;
-  font-weight: bold;
-  border-bottom: 2px solid black;
-}
 .signupform form input {
   padding: 10px;
   color: rgb(0, 0, 0);
@@ -98,11 +249,22 @@
   font-weight: bold;
   border-bottom: 2px solid black;
 }
+.signupinput {
+  text-shadow: 0px 0px 30px rgba(255, 255, 255, 0.47);
+  font-weight: bold;
+}
+.signupinput::placeholder {
+  color: #000000ad;
+  text-shadow: 0px 0px 100px rgb(255, 255, 255);
+  font-style: italic;
+}
 
 .signupform .signupbutton {
-  background-color: #0062ffa0;
+  /* background-color: #0062ffa0; */
+  background: linear-gradient(to left, blue, rgba(255, 255, 255, 0.222));
+
   color: #fff;
-  border: none;
+  border: 1px solid blue;
   padding: 10px 15px;
   border-radius: 5px;
   font-size: 18px;
@@ -114,6 +276,7 @@
 
 .signupform .signupbutton:hover {
   background-color: #0056b3;
+  /* animation: shake 1s ease-in; */
 }
 
 .passwordinput {
@@ -170,7 +333,16 @@
     opacity: 1;
   }
 }
-
+@keyframes shake {
+  0% {
+    margin-left: -25%;
+    opacity: 0;
+  }
+  100% {
+    margin-left: 25%;
+    opacity: 0;
+  }
+}
 .signupform {
   /* Existing styles... */
   animation: dropIn 1s ease forwards; /* Apply the animation to the form */
