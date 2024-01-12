@@ -7,6 +7,7 @@ import { signOut } from "next-auth/react";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Success from "../loaders/success";
+import Sidebar from "./sidebar";
 
 import {
   Container,
@@ -130,7 +131,7 @@ const BusList = () => {
   };
 
   return (
-    <>
+    <div className={classes.ani}>
       <div className={classes.image}>
         <Image
           src="/blur.png" // Replace with the actual path to your image
@@ -143,7 +144,18 @@ const BusList = () => {
         <Image
           width={150}
           height={80}
-          src="/logo.jpg"
+          src="/idp.png"
+          className={classes.idp}
+          style={{
+            borderRadius: "50%",
+            marginRight: "10px",
+          }}
+        ></Image>
+        <Image
+          width={180}
+          height={150}
+          src="/busmarquee.png"
+          className={classes.busmarquee}
           style={{
             borderRadius: "50%",
             marginRight: "10px",
@@ -174,7 +186,7 @@ const BusList = () => {
         </Button>
       </div>
 
-      <Container>
+      <Container className={classes.container}>
         <Box
           sx={{
             display: "flex",
@@ -189,44 +201,33 @@ const BusList = () => {
           <List sx={{ marginTop: "100px" }}>
             {busList.map((bus) => (
               <div key={bus.busNo} className={classes.listfull}>
-                <div className={classes.busDetails}>
-                  <div className={classes.list}>
-                    <div className={classes.heading}>Bus No: </div>
+                <div className={classes.list}>
+                  <div className={classes.divr1}>
+                    {/* <div className={classes.heading}>Bus No: </div> */}
                     <div className={classes.value}>{bus.formData.busNo}</div>
-                    <div className={classes.heading}> From: </div>
+                  </div>
+                  <div className={classes.divr2}>
+                    {/* <div className={classes.heading}> From: </div> */}
                     <div className={classes.value}>{bus.formData.from}</div>
-                    <div className={classes.heading}> To: </div>
+                    {/* <div className={classes.heading}> To: </div> */}
                     <div className={classes.value}> {bus.formData.to}</div>
-                    <div className={classes.heading}>Departure Time: </div>
+                  </div>
+                  <div className={classes.divr3}>
+                    {/* <div className={classes.heading}>Departure Time: </div> */}
                     <div className={classes.value}>
                       {bus.formData.departureTime}
                     </div>
-                    <div className={classes.heading}> Arrival Time: </div>
+                    <Button
+                      onClick={() => handleViewSeats(bus._id)}
+                      className={classes.seatsbutton}
+                    >
+                      View Seats
+                    </Button>
+                    {/* <div className={classes.heading}> Arrival Time: </div> */}
                     <div className={classes.value}>
                       {bus.formData.arrivalTime}
                     </div>
                   </div>
-                </div>
-
-                <div className={classes.buttonContainer}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => handleViewSeats(bus._id)}
-                    sx={{
-                      color: "orange",
-                      borderRadius: "5px",
-                      fontWeight: "bold",
-                      ":hover": {
-                        opacity: "1",
-                        borderRadius: "20px",
-                        border: "2px solid blue",
-                        // transition: "border 0.2s ease,borderRadius 0.2s ease",
-                      },
-                    }}
-                  >
-                    View Seats
-                  </Button>
                 </div>
               </div>
             ))}
@@ -238,7 +239,8 @@ const BusList = () => {
           fullWidth
           open={Boolean(selectedBus)}
           onClose={handleCloseDialog}
-          maxWidth="lg" // You can adjust this value as needed
+          maxWidth="lg"
+          // You can adjust this value as needed
         >
           {selectedBus && (
             <SeatSelection
@@ -250,7 +252,7 @@ const BusList = () => {
         </Dialog>
       </Container>
       {success && <Success props="Booking Successfull" />}
-    </>
+    </div>
   );
 };
 

@@ -58,7 +58,7 @@
 .tooltippass {
   position: absolute;
   top: 10%;
-  left: -100%;
+  left: -70%;
   display: inline-block;
   cursor: pointer;
   font-family: "Arial", sans-serif;
@@ -198,8 +198,9 @@
   border-radius: 30px;
   width: 30%;
   padding-bottom: 20px;
-  backdrop-filter: blur(7px); /* Adjust the blur amount as needed */
+  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
   background-color: rgba(0, 0, 0, 0.165);
+  animation: opac 0.6s ease-in-out;
 }
 
 .signupform {
@@ -260,13 +261,13 @@
 }
 
 .signupform .signupbutton {
-  /* background-color: #0062ffa0; */
-  background: linear-gradient(to left, blue, rgba(255, 255, 255, 0.222));
+  background-color: #0062ffa0;
+  /* background: linear-gradient(to left, blue, rgba(255, 255, 255, 0.222)); */
 
   color: #fff;
   border: 1px solid blue;
   padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 18px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -345,12 +346,12 @@
 }
 .signupform {
   /* Existing styles... */
-  animation: dropIn 1s ease forwards; /* Apply the animation to the form */
+  /* animation: dropIn 1s ease forwards; */
 }
 .signupform {
   /* Existing styles... */
-  transform: translateY(-100%);
-  opacity: 0;
+  /* transform: translateY(-100%); */
+  /* opacity: 0; */
 }
 @keyframes alignElements {
   from {
@@ -363,4 +364,15 @@
 
 .signupform.animate {
   animation: dropIn 1s ease forwards, alignElements 0.5s ease 1s forwards;
+}
+@keyframes opac {
+  0% {
+    /* opacity: 0.1; */
+    filter: blur(30px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
 }
