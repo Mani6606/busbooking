@@ -163,10 +163,6 @@
   }
 }
 
-.signupform {
-  /* animation: dropIn 1s ease forwards; */
-}
-
 @keyframes alignElements {
   from {
     transform: translateX(-100%);
@@ -243,7 +239,7 @@
 
 .btn-23 svg {
   display: block;
-  vertical-align: middle;
+  align-items: center;
 }
 
 .btn-23 [hidden] {

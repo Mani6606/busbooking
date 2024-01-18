@@ -10,6 +10,14 @@
   --end: 6em;
 }
 
+.busmarquee1 {
+  position: absolute;
+  opacity: 1;
+  animation: marquee1 10s linear infinite;
+  --spacing: 6em;
+  --start: 0em;
+  --end: 6em;
+}
 @keyframes marquee {
   0% {
     right: -10%; /* Move off the left side */
@@ -21,6 +29,19 @@
 
   100% {
     right: 100%; /* Come back from the left side */
+  }
+}
+@keyframes marquee1 {
+  0% {
+    right: 100%; /* Move off the left side */
+  }
+
+  50% {
+    right: 50%; /* Move to the right side */
+  }
+
+  100% {
+    right: -10%; /* Come back from the left side */
   }
 }
 

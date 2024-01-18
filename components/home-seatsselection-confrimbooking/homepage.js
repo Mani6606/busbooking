@@ -140,6 +140,7 @@ const BusList = () => {
           objectFit="cover"
         />
       </div>
+
       <div className={classes.header}>
         <Image
           width={150}
@@ -155,6 +156,16 @@ const BusList = () => {
           width={180}
           height={150}
           src="/busmarquee.png"
+          className={classes.busmarquee}
+          style={{
+            borderRadius: "50%",
+            marginRight: "10px",
+          }}
+        ></Image>
+        <Image
+          width={180}
+          height={150}
+          src="/busmarqueee1.png"
           className={classes.busmarquee}
           style={{
             borderRadius: "50%",

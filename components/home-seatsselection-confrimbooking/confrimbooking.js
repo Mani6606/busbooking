@@ -17,7 +17,6 @@ export default function Confirm({
   selectedSeats,
   onConfirm,
 }) {
-  // Calculate total cost based on the prices associated with selected seats
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const totalCost = selectedSeats.reduce((total, seatNo) => {
     const seat = props.seats.find((seat) => seat.seatNo === seatNo);
