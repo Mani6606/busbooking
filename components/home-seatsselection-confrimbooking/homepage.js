@@ -158,15 +158,15 @@ const BusList = () => {
           src="/busmarquee.png"
           className={classes.busmarquee}
           style={{
-            borderRadius: "50%",
-            marginRight: "10px",
+            borderRadius: "100%",
+            padding: "0px",
           }}
         ></Image>
         <Image
-          width={180}
-          height={150}
+          width={400}
+          height={270}
           src="/busmarqueee1.png"
-          className={classes.busmarquee}
+          className={classes.busmarqueeone}
           style={{
             borderRadius: "50%",
             marginRight: "10px",
