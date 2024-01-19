@@ -231,6 +231,11 @@ const BusList = () => {
                     <Button
                       onClick={() => handleViewSeats(bus._id)}
                       className={classes.seatsbutton}
+                      style={{
+                        color: "orange",
+                        backgroundColor: "#f2f2f217",
+                        blur: "2px",
+                      }}
                     >
                       View Seats
                     </Button>
