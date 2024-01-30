@@ -265,7 +265,16 @@ const BusList = ({ onBackButtonClick }) => {
                       <TableRow key={seat.seatNo}>
                         <TableCell>{seat.seatNo}</TableCell>
                         <TableCell>{seat.price}</TableCell>
-                        <TableCell>
+                        <TableCell
+                          style={{
+                            backgroundColor:
+                              seat.gender === "male"
+                                ? "lightgreen" // Male is green
+                                : seat.gender === "female"
+                                ? "pink" // Female is rose
+                                : "white", // Default to white
+                          }}
+                        >
                           {seat.booked ? "Booked" : "Not Booked"}
                         </TableCell>
                         <TableCell>{seat.name || "Null"}</TableCell>
