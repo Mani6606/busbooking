@@ -256,7 +256,7 @@ const BusList = ({ onBackButtonClick }) => {
                       <TableCell>age</TableCell>
                       <TableCell>berth</TableCell>
                       <TableCell>seat_type</TableCell>
-                      <TableCell>reserved</TableCell>
+                   
                       <TableCell>Delete</TableCell>
                     </TableRow>
                   </TableHead>
@@ -282,7 +282,7 @@ const BusList = ({ onBackButtonClick }) => {
                         <TableCell>{seat.age || "Null"}</TableCell>
                         <TableCell>{seat.berth}</TableCell>
                         <TableCell>{seat.seat_type}</TableCell>
-                        <TableCell>{seat.reserved ? "yes" : "No"}</TableCell>
+                      
                         <TableCell>
                           <Button
                             variant="outlined"
