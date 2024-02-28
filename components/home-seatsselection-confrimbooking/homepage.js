@@ -65,14 +65,12 @@ const BusList = () => {
   }, []);
   // =============================================================================================================================
   const handleViewSeats = (_id) => {
-    // Find the selected bus by _id
     const selected = busList.find((bus) => bus._id === _id);
 
     setSelectedBus(selected);
   };
 
   const handleDeleteSeat = (busNo, seatNo) => {
-    // Implement logic to send a request to update the seat
     fetch(`/api/deleteSeat`, {
       method: "DELETE",
       headers: {
@@ -82,7 +80,6 @@ const BusList = () => {
     })
       .then((response) => response.json())
       .then(() => {
-        // Update the selectedBus data after updating the seat
         setSelectedBus((prevSelectedBus) => {
           const updatedSeats = prevSelectedBus.formData.seats.map((seat) => {
             if (seat.seatNo === seatNo) {
@@ -127,14 +124,14 @@ const BusList = () => {
   };
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/" }); // Redirect to the home page after logout
+    await signOut({ callbackUrl: "/" });
   };
 
   return (
     <div className={classes.ani}>
       <div className={classes.image}>
         <Image
-          src="/blur.png" // Replace with the actual path to your image
+          src="/blur.png"
           alt="Background Image"
           layout="fill"
           objectFit="cover"
@@ -158,15 +155,15 @@ const BusList = () => {
           src="/busmarquee.png"
           className={classes.busmarquee}
           style={{
-            borderRadius: "100%",
-            padding: "0px",
+            borderRadius: "50%",
+            marginRight: "10px",
           }}
         ></Image>
         <Image
-          width={400}
-          height={270}
+          width={350}
+          height={260}
           src="/busmarqueee1.png"
-          className={classes.busmarqueeone}
+          className={classes.busmarquee1}
           style={{
             borderRadius: "50%",
             marginRight: "10px",
@@ -201,12 +198,11 @@ const BusList = () => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row", // Change "column" to "row"
+            flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
             height: "80vh",
             flexWrap: "wrap",
-            // Allow items to wrap to the next row
           }}
         >
           <List sx={{ marginTop: "100px" }}>
@@ -231,11 +227,6 @@ const BusList = () => {
                     <Button
                       onClick={() => handleViewSeats(bus._id)}
                       className={classes.seatsbutton}
-                      style={{
-                        color: "orange",
-                        backgroundColor: "#f2f2f217",
-                        blur: "2px",
-                      }}
                     >
                       View Seats
                     </Button>
@@ -250,13 +241,11 @@ const BusList = () => {
           </List>
         </Box>
 
-        {/* Dialog to display seat status */}
         <Dialog
           fullWidth
           open={Boolean(selectedBus)}
           onClose={handleCloseDialog}
           maxWidth="lg"
-          // You can adjust this value as needed
         >
           {selectedBus && (
             <SeatSelection
